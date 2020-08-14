@@ -7,4 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Destination extends Model
 {
     //
+
+    protected $fillable = [
+        'name', 'country_id', 'description'
+    ];
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

@@ -17,13 +17,12 @@ class CreateFlightsTable extends Migration
             $table->id();
             $table->timestamp('departure_time')->nullable();
             $table->timestamp('arrival_time')->nullable();
-            $table->bigInteger('destination_from')->unsigned();
-            $table->bigInteger('destination_to')->unsigned();
-            $table->foreign('destination_from')->references('id')->on('destinations')->onDelete('cascade');
-            $table->foreign('destination_to')->references('id')->on('destinations')->onDelete('cascade');
+            $table->bigInteger('departure_airport_id')->unsigned();
+            $table->bigInteger('arrival_airport_id')->unsigned();
+            $table->foreign('departure_airport_id')->references('id')->on('airports')->onDelete('cascade');
+            $table->foreign('arrival_airport_id')->references('id')->on('airports')->onDelete('cascade');
             $table->integer('gate');
             $table->foreignId('airplane_id')->constrained()->onDelete('cascade');
-            $table->foreignId('airport_id')->constrained()->onDelete('cascade');
             $table->double('min_price');
             $table->timestamps();
         });
