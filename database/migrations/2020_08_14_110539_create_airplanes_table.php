@@ -16,7 +16,9 @@ class CreateAirplanesTable extends Migration
         Schema::create('airplanes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('manufacture_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+            $table->string('model');
+            $table->string('seats');
+            $table->integer('capacity');
             $table->timestamps();
         });
     }
