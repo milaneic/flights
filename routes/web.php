@@ -6,6 +6,7 @@ use App\Country;
 use App\Flight;
 use App\Manufacture;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Constraint\Count;
 
 /*
