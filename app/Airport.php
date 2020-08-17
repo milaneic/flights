@@ -9,6 +9,12 @@ class Airport extends Model
     //
 
     protected $fillable = [
-        'name'
+        'destination_id', 'name'
     ];
+
+
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
 }

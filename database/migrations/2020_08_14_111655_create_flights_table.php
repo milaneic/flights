@@ -23,6 +23,7 @@ class CreateFlightsTable extends Migration
             $table->foreign('arrival_airport_id')->references('id')->on('airports')->onDelete('cascade');
             $table->integer('gate');
             $table->foreignId('airplane_id')->constrained()->onDelete('cascade');
+            $table->foreignId('airline_company_id')->constrained()->onDelete('cascade');
             $table->double('min_price');
             $table->timestamps();
         });

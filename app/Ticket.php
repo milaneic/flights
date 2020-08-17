@@ -3,14 +3,22 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class Ticket extends Model
 {
     //
-    protected $fillable = [];
+    protected $fillable = [
+        'booking_id', 'passenger_id', 'seat'
+    ];
 
     public function booked()
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    public function passenger()
+    {
+        return $this->hasOne(Passenger::class, 'id', 'passenger_id');
     }
 }

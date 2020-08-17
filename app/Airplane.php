@@ -9,7 +9,7 @@ class Airplane extends Model
     //
 
     protected $fillable = [
-        'name', 'manufacture_id',
+        'model', 'manufacture_id', 'seats', 'capacity'
     ];
 
     public function manufacture()

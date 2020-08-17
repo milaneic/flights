@@ -1,6 +1,12 @@
 <?php
 
+use App\Airplane;
+use App\Booking;
+use App\Country;
+use App\Flight;
+use App\Manufacture;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\Constraint\Count;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +26,35 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/planes', function () {
+    $planes = Airplane::all();
+
+    return view('planes', ['planes' => $planes]);
+});
+
+Route::get('/flights', function () {
+    $flights = Flight::all();
+
+    return view('flights', ['flights' => $flights]);
+});
+
+Route::get('/country', function () {
+    $country = Country::all();
+
+    return view('country', ['country' => $country]);
+});
+
+
+Route::get('/manufacture', function () {
+    $manufacture = Manufacture::all();
+
+    return view('manufacture', ['manufacture' => $manufacture]);
+});
+
+
+Route::get('/booking', function () {
+    $booking = Booking::all();
+
+    return view('booking', ['booking' => $booking]);
+});

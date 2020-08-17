@@ -8,7 +8,7 @@ class Flight extends Model
 {
     //
     protected $fillable =
-    ['departure_time', 'arrival_time', 'gate', 'airplane_id', 'departure_airport_id', 'arrival_airport_id', 'min_price'];
+    ['departure_time', 'arrival_time', 'gate', 'airplane_id', 'departure_airport_id', 'arrival_airport_id', 'min_price', 'airline_company_id'];
 
 
     public function bookings()
@@ -16,13 +16,13 @@ class Flight extends Model
         return $this->hasMany(Booking::class);
     }
 
-    public function destination_from()
+    public function airport_from()
     {
-        return $this->hasOne(Destination::class);
+        return $this->hasOne(Airport::class, 'id', 'departure_airport_id');
     }
 
-    public function destination_to()
+    public function airport_to()
     {
-        return $this->hasOne(Destination::class);
+        return $this->hasOne(Airport::class, 'id', 'arrival_airport_id');
     }
 }
