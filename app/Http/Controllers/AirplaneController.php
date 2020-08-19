@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Airplane;
+use App\Manufacture;
 use Illuminate\Http\Request;
 
 class AirplaneController extends Controller
@@ -27,6 +28,7 @@ class AirplaneController extends Controller
     public function create()
     {
         //
+        return view('admin.airplanes.create', ['manufactures' => Manufacture::all()]);
     }
 
     /**
@@ -38,6 +40,16 @@ class AirplaneController extends Controller
     public function store(Request $request)
     {
         //
+        $input = $request->validate(
+            [
+                'model' => 'required',
+                'capacity' => 'required',
+                'manufacture_id' => 'required'
+            ]
+        );
+
+        Airplane::create($input);
+        return redirect()->route('airplanes.index');
     }
 
     /**
@@ -49,6 +61,7 @@ class AirplaneController extends Controller
     public function show(Airplane $airplane)
     {
         //
+        return view('admin.airplanes.show', ['airplane' => $airplane, 'manufactures' => Manufacture::all()]);
     }
 
     /**
@@ -60,6 +73,7 @@ class AirplaneController extends Controller
     public function edit(Airplane $airplane)
     {
         //
+        return view('admin.airplanes.edit', ['airplane' => $airplane, 'manufactures' => Manufacture::all()]);
     }
 
     /**
@@ -72,6 +86,16 @@ class AirplaneController extends Controller
     public function update(Request $request, Airplane $airplane)
     {
         //
+        $input = $request->validate(
+            [
+                'model' => 'required|min:3',
+                'capacity' => 'required',
+                'manufacture_id' => 'required'
+            ]
+        );
+
+        $airplane->update($input);
+        return back();
     }
 
     /**
@@ -83,5 +107,7 @@ class AirplaneController extends Controller
     public function destroy(Airplane $airplane)
     {
         //
+        $airplane->delete();
+        return redirect()->route('airplanes.index');
     }
 }
