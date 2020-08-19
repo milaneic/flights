@@ -12,7 +12,7 @@ class Ticket extends Model
         'booking_id', 'passenger_id', 'seat'
     ];
 
-    public function booked()
+    public function booking()
     {
         return $this->belongsTo(Booking::class);
     }

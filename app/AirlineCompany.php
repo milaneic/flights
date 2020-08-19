@@ -11,4 +11,9 @@ class AirlineCompany extends Model
     protected $fillable = [
         'country_id', 'name', 'phone', 'email',
     ];
+
+    public function flights()
+    {
+        return $this->hasOneOrMany(Flight::class);
+    }
 }

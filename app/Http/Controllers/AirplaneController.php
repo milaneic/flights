@@ -15,6 +15,8 @@ class AirplaneController extends Controller
     public function index()
     {
         //
+        $airplanes = Airplane::all();
+        return view('admin.airplanes.index', ['airplanes' => $airplanes]);
     }
 
     /**

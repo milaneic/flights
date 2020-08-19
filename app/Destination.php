@@ -16,4 +16,9 @@ class Destination extends Model
     {
         return $this->belongsTo(Country::class);
     }
+
+    public function airports()
+    {
+        return $this->hasMany(Airport::class);
+    }
 }

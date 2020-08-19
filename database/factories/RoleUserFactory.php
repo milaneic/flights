@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Airport;
+use App\Model;
 use Faker\Generator as Faker;
 
-$factory->define(Airport::class, function (Faker $faker) {
+$factory->define(Model::class, function (Faker $faker) {
     return [
         //
 

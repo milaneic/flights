@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Passenger::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 }

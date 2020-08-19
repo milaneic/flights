@@ -1,5 +1,6 @@
 <?php
 
+use App\AirlineCompany;
 use Illuminate\Database\Seeder;
 
 class AirlineCompanySeeder extends Seeder
@@ -12,5 +13,6 @@ class AirlineCompanySeeder extends Seeder
     public function run()
     {
         //
+        factory(AirlineCompany::class, 4)->create();
     }
 }

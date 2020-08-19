@@ -1,5 +1,8 @@
 <?php
 
+use App\Booking;
+use App\Passenger;
+use App\Ticket;
 use Illuminate\Database\Seeder;
 
 class BookingSeeder extends Seeder
@@ -12,5 +15,6 @@ class BookingSeeder extends Seeder
     public function run()
     {
         //
+        factory(Booking::class)->create();
     }
 }
