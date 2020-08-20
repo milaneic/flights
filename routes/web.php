@@ -42,7 +42,17 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/companies/{company}', 'AirlineCompanyController@show')->name('companies.show');
     Route::resource('admin/companies', 'AirlineCompanyController', ['middleware' => ['auth', 'role:admin']]);
 
+    //Routes fro airports
+    Route::get('/airports/{airport}', 'AirportController@show')->name('airports.show');
+    Route::resource('admin/airports', 'AirportController', ['middleware' => ['auth', 'role:admin']]);
 
+    //Routes for countries
+    Route::get('/countries/{country}', 'CountryController@show')->name('countries.show');
+    Route::resource('admin/countries', 'CountryController', ['middleware' => ['auth', 'role:admin']]);
+
+    //Routes for destinations
+    Route::get('/destinations/{destination}', 'DestinationController@show')->name('destinations.show');
+    Route::resource('admin/destinations', 'DestinationController', ['middleware' => ['auth', 'role:admin']]);
 
 
     Route::get('/user', function () {

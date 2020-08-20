@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Destination;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\Count;
 
 class DestinationController extends Controller
 {
@@ -58,6 +60,7 @@ class DestinationController extends Controller
     public function edit(Destination $destination)
     {
         //
+        return view('admin.destinations.edit', ['destination' => $destination, 'countries' => Country::all()]);
     }
 
     /**

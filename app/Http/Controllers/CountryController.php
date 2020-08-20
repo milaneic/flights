@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Country;
+use App\Destination;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\Count;
 
 class CountryController extends Controller
 {
@@ -15,6 +17,7 @@ class CountryController extends Controller
     public function index()
     {
         //
+        return view('admin.countries.index', ['countries' => Country::all()]);
     }
 
     /**
@@ -25,6 +28,7 @@ class CountryController extends Controller
     public function create()
     {
         //
+        return view('admin.countries.create');
     }
 
     /**
@@ -36,6 +40,14 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         //
+        $inputs = $request->validate(
+            [
+                'name' => ['required', 'unique:countries', 'string', 'max:255'],
+                'country_code' => ['required', 'unique:countries', 'string', 'max:2']
+            ]
+        );
+
+        Country::create($inputs);
     }
 
     /**
@@ -47,6 +59,7 @@ class CountryController extends Controller
     public function show(Country $country)
     {
         //
+        return view('admin.countries.show', ['country' => $country, 'destinations' => Destination::where('country_id', $country->id)->get()]);
     }
 
     /**
@@ -58,6 +71,7 @@ class CountryController extends Controller
     public function edit(Country $country)
     {
         //
+        return view('admin.countries.edit', ['country' => $country, 'destinations' => Destination::where('country_id', $country->id)->get()]);
     }
 
     /**
@@ -70,6 +84,15 @@ class CountryController extends Controller
     public function update(Request $request, Country $country)
     {
         //
+        $inputs = $request->validate(
+            [
+                'name' => ['required', 'unique:countries,name,' . $country->id, 'string', 'max:255'],
+                'country_code' => ['required', 'unique:countries,country_code,' . $country->id, 'string', 'max:2']
+            ]
+        );
+        $country->update($inputs);
+
+        return redirect()->route('countries.index');
     }
 
     /**
@@ -81,5 +104,7 @@ class CountryController extends Controller
     public function destroy(Country $country)
     {
         //
+        $country->delete();
+        return redirect()->route('countries.index');
     }
 }

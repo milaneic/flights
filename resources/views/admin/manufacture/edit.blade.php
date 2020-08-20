@@ -5,6 +5,15 @@
     <form action="{{route('manufactures.update',$manufacture)}}" method="post">
         @csrf
         @method('PATCH')
+        @if ($errors->any())
+        <div class="alert alert-danger mt-5">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" name="name" id="name" class="form-control" value="{{$manufacture->name}}">

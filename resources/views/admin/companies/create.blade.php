@@ -14,6 +14,15 @@
     <form action="{{route('companies.store')}}" method="post">
         @csrf
         @method('POST')
+        @if ($errors->any())
+        <div class="alert alert-danger mt-5">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <div class="form-group">
             <label for="Name">Name:</label>
             <input type="text" name="name" id="name" class="form-control" placeholder="Please enter company name...">

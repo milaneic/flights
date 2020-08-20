@@ -14,6 +14,13 @@
     <form action="{{route('companies.update',$company)}}" method="post">
         @csrf
         @method('PATCH')
+        <div class="alert alert-danger mt-5">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
         <div class="form-group">
             <label for="Name">Name:</label>
             <input type="text" name="name" id="name" class="form-control" value="{{$company->name}}">
