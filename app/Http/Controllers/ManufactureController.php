@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Manufacture;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\Count;
 
 class ManufactureController extends Controller
 {
@@ -15,6 +17,7 @@ class ManufactureController extends Controller
     public function index()
     {
         //
+        return view('admin.manufacture.index', ['manufactures' => Manufacture::all()]);
     }
 
     /**
@@ -25,6 +28,7 @@ class ManufactureController extends Controller
     public function create()
     {
         //
+        return view('admin.manufacture.create', ['countries' => Country::all()]);
     }
 
     /**
@@ -36,6 +40,13 @@ class ManufactureController extends Controller
     public function store(Request $request)
     {
         //
+        $input = $request->validate([
+            'name' => 'required',
+            'country_id' => 'required'
+        ]);
+
+        Manufacture::create($input);
+        return redirect()->route('manufactures.index');
     }
 
     /**
@@ -47,6 +58,7 @@ class ManufactureController extends Controller
     public function show(Manufacture $manufacture)
     {
         //
+        return view('admin.manufacture.show', ['manufacture' => $manufacture]);
     }
 
     /**
@@ -58,6 +70,7 @@ class ManufactureController extends Controller
     public function edit(Manufacture $manufacture)
     {
         //
+        return view('admin.manufacture.edit', ['manufacture' => $manufacture, 'countries' => Country::all()]);
     }
 
     /**
@@ -70,6 +83,16 @@ class ManufactureController extends Controller
     public function update(Request $request, Manufacture $manufacture)
     {
         //
+        $input = $request->validate(
+            [
+                'name' => 'required|min:3',
+                'country_id' => 'required'
+            ]
+
+        );
+
+        $manufacture->update($input);
+        return redirect()->route('manufactures.index');
     }
 
     /**
@@ -81,5 +104,7 @@ class ManufactureController extends Controller
     public function destroy(Manufacture $manufacture)
     {
         //
+        $manufacture->delete();
+        return redirect()->route('manufactures.index');
     }
 }

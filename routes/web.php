@@ -30,13 +30,22 @@ Route::group(['middleware' => 'web'], function () {
     Auth::routes();
 
     //Routes for airplanes
-    // Route::get('/airplanes', 'AirplaneController@index')->name('airplanes');
+    Route::get('/airplanes/{airplane}', 'AirplaneController@show')->name('airplanes.show');
+    Route::resource('admin/airplanes', 'AirplaneController', ['middleware' => ['web', 'auth', 'role:admin']]);
+
+    //Routes for  manufactures
+    Route::get('/manufactures/{manufacture}', 'ManufactureController@show')->name('manufactures.show');
+    Route::resource('admin/manufactures', 'ManufactureController', ['middleware' => ['auth', 'role:admin']]);
+
+
+    //Routes for  airlines companies
+    Route::get('/companies/{company}', 'AirlineCompanyController@show')->name('companies.show');
+    Route::resource('admin/companies', 'AirlineCompanyController', ['middleware' => ['auth', 'role:admin']]);
+
+
 
 
     Route::get('/user', function () {
         return view('user');
     })->middleware('web', 'auth');
-
-    Route::get('/airplanes/{airplane}', 'AirplaneController@show')->name('airplanes.show');
-    Route::resource('admin/airplanes', 'AirplaneController', ['middleware' => ['web', 'auth', 'role:admin']]);
 });
