@@ -1,8 +1,7 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
+<x-admin-master>
+    @section('content')
     <h1>All manufactures</h1>
-    <h4 class="mt-5"><a href="{{route('manufactures.create')}}">Create a manufactur</a></h4>
+    <h4 class="mt-5 mb-3"><a href="{{route('manufactures.create')}}">Create a manufactur</a></h4>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -21,5 +20,5 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    @endsection
+</x-admin-master>

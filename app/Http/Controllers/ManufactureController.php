@@ -70,7 +70,7 @@ class ManufactureController extends Controller
     public function edit(Manufacture $manufacture)
     {
         //
-        return view('admin.manufacture.edit', ['manufacture' => $manufacture, 'countries' => Country::all()]);
+        return view('admin.manufacture.edit', ['manufacture' => $manufacture, 'countries' => Country::all(),]);
     }
 
     /**

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <h1>All ariplanes</h1>
-    <table class="table table-striped">
+    <h1 class="mt-5">All ariplanes</h1>
+    <table class="table table-striped mt-5">
         <thead>
             <tr>
                 <td class="text-center">Model:</td>
@@ -23,7 +23,7 @@
                 <td class="text-center">
                     {{$a->capacity}}
                 </td>
-                <td class="text-center"><a href="{{route('airplanes.edit',$a->id)}}">Detaljnije</a></td>
+                <td class="text-center"><a href="{{route('airplanes.edit',$a->id)}}">Details</a></td>
             </tr>
             @endforeach
         </tbody>

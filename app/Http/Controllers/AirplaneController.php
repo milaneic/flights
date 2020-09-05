@@ -16,7 +16,7 @@ class AirplaneController extends Controller
     public function index()
     {
         //
-        $airplanes = Airplane::all();
+        $airplanes = Airplane::orderBy('manufacture_id')->get();
         return view('admin.airplanes.index', ['airplanes' => $airplanes]);
     }
 

@@ -16,7 +16,7 @@ class AirportController extends Controller
     public function index()
     {
         //
-        return view('admin.airports.index', ['airports' => Airport::all()]);
+        return view('admin.airports.index', ['airports' => Airport::paginate(20)]);
     }
 
     /**

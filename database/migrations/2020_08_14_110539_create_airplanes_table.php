@@ -17,7 +17,7 @@ class CreateAirplanesTable extends Migration
             $table->id();
             $table->foreignId('manufacture_id')->constrained()->onDelete('cascade');
             $table->string('model');
-            $table->string('seats')->nullable();
+            $table->text('seats');
             $table->integer('capacity');
             $table->timestamps();
         });

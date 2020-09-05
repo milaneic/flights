@@ -42,10 +42,24 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if ($request->user()->hasRole('admin')) {
-            return redirect()->route('airplanes.index');
+        // if ($request->user()->hasRole('admin')) {
+        //     return redirect()->route('airplanes.index');
+        // } else {
+        //     return redirect()->route('/');
+        // }
+
+        // if ($user->hasRole('admin')) {
+        //     return redirect(RouteServiceProvider::HOME);
+        // } else {
+        //     return redirect(RouteServiceProvider::HOME_USER);
+        // }
+
+        if ($user->hasRole('admin')) {
+            return redirect(RouteServiceProvider::HOME);
+        } else if ($user->hasRole('moderator')) {
+            return redirect(RouteServiceProvider::HOME);
         } else {
-            return redirect()->route('/dsadasda');
+            return redirect(RouteServiceProvider::HOME_USER);
         }
     }
 }

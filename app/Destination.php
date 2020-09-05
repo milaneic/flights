@@ -21,4 +21,9 @@ class Destination extends Model
     {
         return $this->hasMany(Airport::class);
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

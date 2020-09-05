@@ -17,6 +17,7 @@ class CreateAirportsTable extends Migration
             $table->id();
             $table->foreignId('destination_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('ident');
             $table->timestamps();
         });
     }

@@ -9,7 +9,7 @@ class Ticket extends Model
 {
     //
     protected $fillable = [
-        'booking_id', 'passenger_id', 'seat'
+        'booking_id', 'passenger_id', 'seat', 'price'
     ];
 
     public function booking()

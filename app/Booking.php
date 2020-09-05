@@ -9,7 +9,7 @@ class Booking extends Model
     //
 
     protected $fillable = [
-        'user_id', 'flight_id', 'amount'
+        'user_id', 'flight_id', 'amount', 'is_confirmed'
     ];
 
     public function tickets()
@@ -20,5 +20,15 @@ class Booking extends Model
     public function flight()
     {
         return $this->belongsTo(Flight::class);
+    }
+
+    public function destination_from()
+    {
+        return $this->flight()->destination_from();
+    }
+
+    public function destination_to()
+    {
+        return $this->flight()->destination_to();
     }
 }

@@ -25,4 +25,24 @@ class Flight extends Model
     {
         return $this->hasOne(Airport::class, 'id', 'arrival_airport_id');
     }
+
+    public function destination_from()
+    {
+        return $this->airport_from->destination();
+    }
+
+    public function destination_to()
+    {
+        return $this->airport_to->destination();
+    }
+
+    public function airline_company()
+    {
+        return $this->belongsTo(AirlineCompany::class);
+    }
+
+    public function airplane()
+    {
+        return $this->belongsTo(Airplane::class);
+    }
 }

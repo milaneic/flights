@@ -1,0 +1,32 @@
+[
+    {
+        "id": 0,
+        "seat": "1A",
+        "free": true
+    },
+    {
+        "id": 1,
+        "seat": "1B",
+        "free": true
+    },
+    {
+        "id": 2,
+        "seat": "1C",
+        "free": true
+    },
+    {
+        "id": 3,
+        "seat": "1D",
+        "free": true
+    },
+    {
+        "id": 4,
+        "seat": "1E",
+        "free": true
+    },
+    {
+        "id": 5,
+        "seat": "1F",
+        "free": true
+    }
+]

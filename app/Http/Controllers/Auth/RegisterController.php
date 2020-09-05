@@ -70,8 +70,8 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        $role = Role::find(2);
-        $user->roles()->save($role);
+        $role = Role::where('name', 'user')->first();
+        $user->assignRole($role);
         return $user;
     }
 }

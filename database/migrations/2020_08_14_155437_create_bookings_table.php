@@ -18,6 +18,7 @@ class CreateBookingsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('flight_id')->constrained()->onDelete('cascade');
             //           $table->string('confirmation_code'); napraviti kasnije
+            $table->integer('is_confirmed');
             $table->double('amount');
             $table->timestamps();
         });

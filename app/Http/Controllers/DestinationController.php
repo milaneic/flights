@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Country;
 use App\Destination;
+use App\Image;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Constraint\Count;
+use Illuminate\Support\Facades\Storage;
 
 class DestinationController extends Controller
 {
@@ -17,8 +19,8 @@ class DestinationController extends Controller
     public function index()
     {
         //
+        return view('admin.destinations.index', ['destinations' => Destination::paginate(20)]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -27,6 +29,7 @@ class DestinationController extends Controller
     public function create()
     {
         //
+        return view('admin.destinations.create');
     }
 
     /**
@@ -38,6 +41,28 @@ class DestinationController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request->all());
+        $inputs = $request->validate([
+            'name' => ['required', 'string'],
+            'country_id' => ['required', 'integer'],
+            'description' => ['required', 'min:100'],
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+        $d = Destination::create($inputs);
+        // dd($request->all());
+        $files = $request->file('file');
+        foreach ($files as $file) {
+            $name = rand() . "." . $file->getClientOriginalExtension();
+            $img = $file->store('images/destinations', 'public');
+            $d->images()->create(
+                ['url' => $img]
+            );
+        }
+        // if ($request['image']) {
+        //     $d->images()->create(['url' => $request['image']]);
+        // }
+
+        return redirect()->route('destinations.index');
     }
 
     /**
@@ -49,6 +74,7 @@ class DestinationController extends Controller
     public function show(Destination $destination)
     {
         //
+        return view('admin.destinations.show', ['destination' => $destination]);
     }
 
     /**
