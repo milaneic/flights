@@ -22,7 +22,7 @@
         <div class="form-group">
             <label for="departure_time">Daparture date:</label>
             <input type="datetime-local" name="departure_time" id="departure_time" class="form-control"
-                style="width: 20%">
+                style="width: 20%" value="{{Carbon\Carbon::parse($flight->departure_time)->format('Y-m-d\TH:i')}}">
         </div>
         <div class="form-group">
             <label for="arrival_airport_id">Arrivaal airport:</label>
@@ -38,7 +38,8 @@
 
         <div class="form-group">
             <label for="departure_time">Arrival date:</label>
-            <input type="datetime-local" name="arrival_time" id="arrival_time" class="form-control" style="width: 20%">
+            <input type="datetime-local" name="arrival_time" id="arrival_time" class="form-control" style="width: 20%"
+                value="{{Carbon\Carbon::parse($flight->arrival_time)->format('Y-m-d\TH:i')}}">
         </div>
 
         <div class="form-group">
@@ -73,5 +74,10 @@
         </div>
         <button class="btn btn-primary">Update a flight</button>
     </form>
+    <br>
+    <form action="{{route('flights.destroy',$flight)}}" method="post">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete a flight</button></form>
     @endsection
 </x-admin-master>

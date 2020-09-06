@@ -56,8 +56,6 @@ class LoginController extends Controller
 
         if ($user->hasRole('admin')) {
             return redirect(RouteServiceProvider::HOME);
-        } else if ($user->hasRole('moderator')) {
-            return redirect(RouteServiceProvider::HOME);
         } else {
             return redirect(RouteServiceProvider::HOME_USER);
         }

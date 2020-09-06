@@ -109,9 +109,8 @@
                             <h4 class="text-center" style="margin: auto">{{$item->min_price}} euro</h4>
                         </div>
                         <div class="booking d-flex justify-content-center">
-                            <button class="btn btn-outline-success mt-2" type="submit">Book
-                                a
-                                ticket</button>
+                            <a href="{{route('booking.create',[$item,1])}}" class="btn btn-outline-success mt-2">Book a
+                                ticket</a>
                         </div>
                     </div>
                 </div>

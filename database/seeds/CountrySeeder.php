@@ -20,6 +20,7 @@ class CountrySeeder extends Seeder
     {
         // 
         $faker = Faker::create();
+
         $json = file_get_contents(storage_path('json/countries.json'));
         $json2 = file_get_contents(storage_path('json/airports.json'));
         $objs2 = json_decode($json2, true);
@@ -45,16 +46,9 @@ class CountrySeeder extends Seeder
                         'destination_id' => $destination->id,
                         'name' => $obj2['name'],
                         'ident' => $obj2['ident']
-
                     ]);
                 }
             }
         }
-
-        //
-
-        // factory(Country::class)->create()->each(function ($c) {
-        //     factory(Destination::class)->create(['country_id' => $c->id]);
-        // });
     }
 }

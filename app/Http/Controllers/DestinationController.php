@@ -52,7 +52,6 @@ class DestinationController extends Controller
         // dd($request->all());
         $files = $request->file('file');
         foreach ($files as $file) {
-            $name = rand() . "." . $file->getClientOriginalExtension();
             $img = $file->store('images/destinations', 'public');
             $d->images()->create(
                 ['url' => $img]
@@ -98,7 +97,27 @@ class DestinationController extends Controller
      */
     public function update(Request $request, Destination $destination)
     {
-        //
+        $inputs = $request->validate([
+            'name' => ['required', 'string'],
+            'country_id' => ['required', 'integer'],
+            'description' => ['required', 'min:100'],
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+        $destination->update($inputs);
+        if (count($destination->images) > 0) {
+            $destination->images()->delete();
+        }
+        // dd($request->all());
+        $files = $request->file('file');
+        foreach ($files as $file) {
+            $img = $file->store('images/destinations', 'public');
+            $destination->images()->create(
+                ['url' => $img]
+            );
+        }
+
+        session()->flash('message', 'Destination has been sucessfuly updated!');
+        return back();
     }
 
     /**

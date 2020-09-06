@@ -94,5 +94,7 @@ class PassengerController extends Controller
     public function destroy(Passenger $passenger)
     {
         //
+        $passenger->delete();
+        return redirect()->route('passengers.index');
     }
 }

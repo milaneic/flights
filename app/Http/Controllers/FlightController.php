@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Airport;
 use App\Destination;
 use App\Flight;
+use App\Airplane;
 use App\User;
 use Carbon\Carbon;
 use Carbon\Traits\Date;
@@ -23,13 +24,16 @@ class FlightController extends Controller
      */
     public function index(Request $request)
     {
-
         if (!Auth::check()) {
             return view('flights.index', ['flights' => Flight::all()->random(), 'destinations' => Destination::all()]);
-        } else if (auth()->user()->hasRole('admin')) {
-            return view('admin.flights.index', ['flights' => Flight::paginate(20), 'destinations' => Destination::all()]);
         } else {
-            return view('flights.index', ['flights' => Flight::all()->random(), 'destinations' => Destination::all()]);
+            $user = User::find(auth()->user()->id);
+
+            if ($user->hasRole('admin')) {
+                return view('admin.flights.index', ['flights' => Flight::paginate(20), 'destinations' => Destination::all()]);
+            } else {
+                return view('flights.index', ['flights' => Flight::all()->random(), 'destinations' => Destination::all()]);
+            }
         }
     }
 
@@ -41,7 +45,7 @@ class FlightController extends Controller
     public function create()
     {
         //
-        return view('booking.create');
+        return view('admin.flights.create');
     }
 
     /**
@@ -53,7 +57,41 @@ class FlightController extends Controller
     public function store(Request $request)
     {
         //
+        $inputs = $request->validate([
+            'departure_airport_id' => ['required', 'integer'],
+            'departure_time' => ['required', 'date'],
+            'arrival_airport_id' => ['required', 'integer'],
+            'arrival_time' => ['required', 'date'],
+            'gate' => ['required', 'integer'],
+            'airplane_id' => ['required', 'integer'],
+            'airline_company_id' => ['required', 'integer'],
+            'min_price' => ['required', 'numeric'],
+        ]);
+        $airplane = Airplane::find($request['airplane_id'])->first();
+        $available_seats = $airplane->capacity;
+        $seats_capacity = $airplane->capacity;
+        $seats_map = $airplane->seats;
+        $flight = new Flight;
+        $flight->departure_airport_id = $inputs['departure_airport_id'];
+        $flight->departure_time = $inputs['departure_time'];
+        $flight->arrival_airport_id = $inputs['arrival_airport_id'];
+        $flight->arrival_time = $inputs['arrival_time'];
+        $flight->gate = $inputs['gate'];
+        $flight->airplane_id = $inputs['airplane_id'];
+        $flight->airline_company_id = $inputs['airline_company_id'];
+        $flight->min_price = $inputs['min_price'];
+        $flight->available_seats = $available_seats;
+        $flight->seats_capacity = $seats_capacity;
+        $flight->seats_map = $seats_map;
+        $flight->save();
 
+
+        // array_push($inputs, $available_seats);
+        // array_push($inputs, $seats_capacity);
+        // array_push($inputs, $seats_map);
+
+        // Flight::create($inputs);
+        return redirect()->route('flights.index');
     }
 
     /**
@@ -103,7 +141,26 @@ class FlightController extends Controller
             ]
         );
 
-        $flight->update($inputs);
+        // dd($request->all());
+        $airplane = Airplane::find($request['airplane_id'])->first();
+        $available_seats = $airplane->capacity;
+        $seats_capacity = $airplane->capacity;
+        $seats_map = $airplane->seats;
+
+
+        $flight->departure_airport_id = $inputs['departure_airport_id'];
+        $flight->departure_time = $inputs['departure_time'];
+        $flight->arrival_airport_id = $inputs['arrival_airport_id'];
+        $flight->arrival_time = $inputs['arrival_time'];
+        $flight->gate = $inputs['gate'];
+        $flight->airplane_id = $inputs['airplane_id'];
+        $flight->airline_company_id = $inputs['airline_company_id'];
+        $flight->min_price = $inputs['min_price'];
+        $flight->available_seats = $available_seats;
+        $flight->seats_capacity = $seats_capacity;
+        $flight->seats_map = $seats_map;
+        $flight->update();
+        // $flight->update($inputs);
         session()->flash('message', 'The flight is updated!!!');
         return back();
     }
@@ -117,6 +174,8 @@ class FlightController extends Controller
     public function destroy(Flight $flight)
     {
         //
+        $flight->delete();
+        return redirect()->route('flights.index');
     }
 
     public function search(Request $request)
