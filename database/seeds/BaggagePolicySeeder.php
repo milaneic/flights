@@ -22,9 +22,21 @@ class BaggagePolicySeeder extends Seeder
                     $c->baggage_policies()->create([
                         'baggage_id' => $b->id, 'price' => 0
                     ]);
+                } else if ($b->id == 2) {
+                    $c->baggage_policies()->create([
+                        'baggage_id' => $b->id, 'price' => $faker->randomElement([10, 15])
+                    ]);
+                } else if ($b->id == 3) {
+                    $c->baggage_policies()->create([
+                        'baggage_id' => $b->id, 'price' => $faker->randomElement([20, 25])
+                    ]);
+                } else if ($b->id == 4) {
+                    $c->baggage_policies()->create([
+                        'baggage_id' => $b->id, 'price' => $faker->randomElement([30, 35])
+                    ]);
                 } else {
                     $c->baggage_policies()->create([
-                        'baggage_id' => $b->id, 'price' => $faker->randomElement([10, 15, 20, 25, 30, 35])
+                        'baggage_id' => $b->id, 'price' => $faker->randomElement([40, 45])
                     ]);
                 }
             }

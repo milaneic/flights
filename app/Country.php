@@ -17,6 +17,16 @@ class Country extends Model
         return $this->hasMany(Destination::class);
     }
 
+    public function airports()
+    {
+        return $this->destinations()->airports();
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');

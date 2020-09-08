@@ -15,7 +15,7 @@ class BaggageSeeder extends Seeder
     {
         //
         $baggages = [
-            ['type' => 'Free handed luggage', 'description' => 'This baggage is free.'],
+            ['type' => 'Free handed luggage', 'description' => 'Free carry on bag'],
             ['type' => 'Trolley bag', 'description' => 'This baggage is free.'],
             ['type' => 'Small check-in', 'description' => 'This baggage is free.'],
             ['type' => 'Medium check-in', 'description' => 'This baggage is free.'],

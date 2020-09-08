@@ -1,4 +1,4 @@
-@extends('layouts.app');
+@extends('layouts.app2');
 @section('content')
 <div class="container">
     <h1>Flight number {{$flight->id}} from {{$flight->destination_from->name}} to {{$flight->destination_to->name}}</h1>
@@ -47,7 +47,7 @@
                     <label for="last_name[]">Last name:</label>
                     <input type="text" name="last_name[]" id="last_name[]" class="form-control">
                 </div>
-                <div class="form-group">
+                <div class="form-group d-flex">
                     <label for="gender[]">Gender:</label>
                     <select name="gender[]" id="gender[]" class="form-control" style="width: 40%">
                         <option value="male">Male</option>

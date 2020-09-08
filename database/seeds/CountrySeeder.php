@@ -31,7 +31,8 @@ class CountrySeeder extends Seeder
         foreach ($objs as $obj) {
             $country = Country::create([
                 'name' => $obj['name'],
-                'country_code' => $obj['code']
+                'country_code' => $obj['code'],
+                'description' => $faker->sentences(10, true)
             ]);
             $brojac = 0;
             foreach ($objs2 as $obj2) {
@@ -40,7 +41,7 @@ class CountrySeeder extends Seeder
                     $destination = App\Destination::create([
                         'name' => $obj2['municipality'],
                         'country_id' => $country->id,
-                        'description' => $obj2['municipality'],
+                        'description' => $faker->paragraphs(20, true),
                     ]);
                     $airport = App\Airport::create([
                         'destination_id' => $destination->id,

@@ -22,7 +22,7 @@ class FlightSeeder extends Seeder
         $faker = Faker\Factory::create();
         foreach (App\Airport::all() as $airport) {
             $date = Carbon::today();
-            for ($i = 0; $i < 2; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $airplane = App\Airplane::where('id', rand(1, 4))->first();
                 $flight = App\Flight::create([
                     'departure_time' => $date->addMinutes(30),

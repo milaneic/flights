@@ -30,7 +30,24 @@ use function GuzzleHttp\json_encode;
 
 Route::group(['middleware' => 'web'], function () {
 
-    Route::get('/', 'FlightController@index');
+    //Nav routes
+    Route::get('/', 'HomeController@index');
+    Route::get('/about', function () {
+        return view('about');
+    });
+    Route::get('/contact', function () {
+        return view('contact');
+    });
+    Route::get('/admin', function () {
+        return view('admin.flights.index');
+    });
+
+
+    //Route for send contact us mail 
+    Route::post('/mail', 'HomeController@mail')->name('mail-send');
+
+
+
     Route::get('/explore', function () {
         return view('explore');
     })->name('explore');
@@ -60,11 +77,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::resource('admin/airports', 'AirportController', ['middleware' => ['auth', 'role:admin']]);
 
     //Routes for countries
-    Route::get('/countries/{country}', 'CountryController@show')->name('countries.show');
+    Route::get('/countries/{country}', 'CountryController@show')->name('country.show');
     Route::resource('admin/countries', 'CountryController', ['middleware' => ['auth', 'role:admin']]);
 
     //Routes for destinations
-    Route::get('/destinations/{destination}', 'DestinationController@show')->name('destinations.show');
+    Route::get('/destinations/{destination}', 'DestinationController@show')->name('destination.show');
     Route::resource('admin/destinations', 'DestinationController', ['middleware' => ['auth', 'role:admin']]);
 
     //Routes for baggages
@@ -98,6 +115,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/booking/{booking}/baggage', 'BookingController@baggage')->middleware('auth')->name('booking.baggage');
     Route::post('/booking/{booking}/baggage', 'BookingController@make')->middleware('auth')->name('booking.make');
 
+    Route::get('/booking/{booking}/check-in/{i?}', 'BookingController@check_in')->middleware(['auth', 'can:view,booking'])->name('booking.check-in');
+    Route::post('/booking/{booking}/check-in/{i?}', 'BookingController@check_store')->middleware(['auth'])->name('booking.check-store');
     // //Route for seat    
     // Route::get('/seat', function () {
     //     return view('seat');
@@ -109,6 +128,9 @@ Route::group(['middleware' => 'web'], function () {
     })->name('admin.index')->middleware('auth', 'role:admin');
 
 
+    Route::get('/o/{id?}', function ($id = null) {
+        dd($id);
+    });
 
     // Route::get('/json', function () {
     //     $json = file_get_contents(storage_path('json/countries.json'));
@@ -205,6 +227,10 @@ Route::group(['middleware' => 'web'], function () {
                 $f->save();
             }
         }
+    });
+
+    Route::get('/template', function () {
+        return view('template');
     });
 
     // Route::get('/r', function () {

@@ -18,8 +18,8 @@ class CreatePassengersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->enum('gender', ['male', 'female']);
-            $table->enum('document_type', ['card', 'passport']);
-            $table->string('document_number');
+            $table->enum('document_type', ['card', 'passport'])->nullable();
+            $table->string('document_number')->nullable();
             $table->timestamps();
         });
     }

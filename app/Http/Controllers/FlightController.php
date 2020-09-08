@@ -13,6 +13,7 @@ use Illuminate\Session\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use PDO;
 
 class FlightController extends Controller
@@ -180,31 +181,45 @@ class FlightController extends Controller
 
     public function search(Request $request)
     {
-        //dd($request->all());
-        $dest1 = Destination::where('name', $request['destination1'])->first();
+        //validation flight if exist
+        $data = $request->validate([
+            'destination1' => ['required', 'string', 'exists:destinations,name'],
+            'destination2' => ['nullable', 'string', 'exists:destinations,name'],
+            'date' => ['nullable'],
+            'person' => ['required', 'integer', 'min:1']
+        ]);
+        $dest1 = Destination::whereRaw("UPPER(`name`)=?", Str::upper($request['destination1']))->first();
         $airports1 = Airport::select('id')->where('destination_id', $dest1->id)->get()->toArray();
+
         if ($request['destination2'] != null) {
-            $dest2 = Destination::where('name', $request['destination2'])->first();
+
+            $dest2 = Destination::whereRaw("UPPER(`name`)=?", Str::upper($request['destination2']))->first();
             $airports2 = Airport::select('id')->where('destination_id', $dest2->id)->get()->toArray();
-            if ($request['date1'] != null) {
-                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $request['date1'])->whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->get();
+
+            if ($request['date'] != null) {
+                $date = Carbon::parse($request['date'])->format('Y-m-d');
+                //$flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->get();
+                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->paginate(3)->appends($request->all());
             } else {
-                $flights = Flight::whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->get();
+                $flights = Flight::whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->paginate(3)->appends($request->all());
             }
         } else {
-            if ($request['date1'] != null) {
-                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $request['date1'])->whereIn('departure_airport_id', $airports1)->get();
+
+            if ($request['date'] != null) {
+                $date = Carbon::parse($request['date'])->format('Y-m-d');
+                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->whereIn('departure_airport_id', $airports1)->paginate(3)->appends($request->all());
             } else {
-                $flights = Flight::whereIn('departure_airport_id', $airports1)->get();
+                $flights = Flight::whereIn('departure_airport_id', $airports1)->paginate(3)->appends($request->all());
             }
         }
-        return view('booking.index', ['flights' => $flights, 'person' => $request['person']]);
-        // dd(Date($request['date1']));
+
+        return view('booking.index', ['flights' => $flights, 'request' => $request->all()]);
+
 
 
         // $flights = Flight::whereRaw('DATE(`departure_time`)=? AND `departure_airport_id`=? , $request['date1'],57)->get();
 
-        dd($flights);
+
     }
 
     public function explore(Request $request)

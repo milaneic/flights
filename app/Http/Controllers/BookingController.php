@@ -70,7 +70,7 @@ class BookingController extends Controller
             ]
         );
 
-        // dd($request->all());
+        //dd($request->all());
         $first_names = $request['first_name'];
         $last_names = $request['last_name'];
         $gender = $request['gender'];
@@ -78,7 +78,7 @@ class BookingController extends Controller
         $booking = Booking::create([
             'user_id' => auth()->user()->id,
             'flight_id' => $request['flight'],
-            'amount' => $flight->min_price * $request['person'],
+            'amount' => $flight->min_price * count($request['first_name']),
             'is_confirmed' => 0
         ]);
 
@@ -89,8 +89,8 @@ class BookingController extends Controller
                 'first_name' => $first_names[$i],
                 'last_name' => $last_names[$i],
                 'gender' => $gender[$i],
-                'document_type' => 'passport',
-                'document_number' => 1
+                'document_type' => null,
+                'document_number' => null
             ]);
             array_push($passenger, $pass);
             Ticket::create(
@@ -183,22 +183,57 @@ class BookingController extends Controller
         $company = $booking->flight->airline_company;
         $policy = $company->baggage_policies;
         $total = 0;
-        DB::table('baggage_booking')->insert(['booking_id' => $booking->id, 'baggage_id' => 1, 'quantity' => count($booking->tickets)]);
-        //BaggageBooking::create(['booking_id' => $booking->id, 'baggage_id' => 1, 'quantity' => count($booking->tickets)]);
+        DB::table('baggage_booking')->insert(['booking_id' => $booking->id, 'baggage_id' => 1, 'quantity' => count($booking->tickets), 'created_at' => now(), 'updated_at' => now()]);
         for ($i = 0; $i < count($allbags); $i++) {
             $sum = 0;
             foreach ($allbags[$i] as $specific_bag_type) {
                 $sum += $specific_bag_type;
             }
             if ($sum != 0) {
-                echo $i;
                 $i += 2;
-                DB::table('baggage_booking')->insert(['booking_id' => $booking->id, 'baggage_id' => $i, 'quantity' => $sum]);
-                //BaggageBooking::create(['booking_id' => $booking->id, 'baggage_id' => $i + 2, 'quantity' => $sum]);
-                echo $i;
+                DB::table('baggage_booking')->insert(['booking_id' => $booking->id, 'baggage_id' => $i, 'quantity' => $sum, 'created_at' => now(), 'updated_at' => now()]);
+                $current_policy = DB::table('baggage_policies')->where([['baggage_id', $i], ['airline_company_id', $company->id]])->first();
+                $total += $sum * (int)$current_policy->price;
                 $i -= 2;
             }
         }
-        // $booking->amount += $total;
+
+        $booking->amount += $total;
+        $booking->save();
+        return redirect()->route('user.show', auth()->user()->id);
+    }
+
+    public function check_in(Booking $booking, $i = null)
+    {
+        if ($i != null) {
+            $ticket = $booking->tickets->get($i);
+            return view('booking.check-in', ['booking' => $booking, 'passenger' => $ticket->passenger, 'i' => $i]);
+        } else {
+            return view('booking.check-in', ['booking' => $booking]);
+        }
+    }
+
+    public function check_store(Booking $booking, Request $request, $i = null)
+    {
+        $data = $request->validate([
+            'document_type' => ['in:passport,card'],
+            'document_number' => ['required', 'numeric', 'min:13']
+        ]);
+        if ($i == count($booking->tickets) - 1) {
+            $ticket = $booking->tickets->get($i);
+            $passenger = $ticket->passenger;
+            //dd($passenger);
+            $passenger->update($data);
+            $booking->is_confirmed = 1;
+            $booking->save();
+            session()->flash('message', 'You have succsessfuly checked-in!!!');
+            return redirect()->route('user.show', auth()->user()->id);
+        } else {
+            $ticket = $booking->tickets->get($i);
+            $passenger = $ticket->passenger;
+            dd($passenger);
+            $passenger->update($data);
+            return redirect()->route('booking.check-in', [$booking, ++$i]);
+        }
     }
 }

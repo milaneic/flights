@@ -54,7 +54,9 @@ class Flight extends Model
         $total_seats = $flight->seats_capacity;
         $seats_left = $flight->available_seats;
 
-        $procentage_free_seats = $seats_left / $total_seats;
+
+
+        $procentage_free_seats = ($seats_left / $total_seats) * 100;
         switch ($procentage_free_seats) {
             case $procentage_free_seats < 80 && $procentage_free_seats > 60:
                 $flight->min_price *= 1.2;
@@ -73,6 +75,8 @@ class Flight extends Model
                 break;
             case $procentage_free_seats < 20:
                 $flight->min_price *= 3;
+                break;
+            default:
                 break;
                 $flight->save();
         }

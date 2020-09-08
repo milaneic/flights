@@ -53,11 +53,10 @@ class LoginController extends Controller
         // } else {
         //     return redirect(RouteServiceProvider::HOME_USER);
         // }
-
-        if ($user->hasRole('admin')) {
-            return redirect(RouteServiceProvider::HOME);
+        if ($user->hasRole('admin') || $user->hasRole('moderator')) {
+            return redirect(RouteServiceProvider::ADMIN);
         } else {
-            return redirect(RouteServiceProvider::HOME_USER);
+            return redirect(RouteServiceProvider::HOME);
         }
     }
 }

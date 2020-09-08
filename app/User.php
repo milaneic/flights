@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'country_id'
     ];
 
     /**
@@ -51,6 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     public function hasRole($role_slug)
