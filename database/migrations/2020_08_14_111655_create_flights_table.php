@@ -25,6 +25,9 @@ class CreateFlightsTable extends Migration
             $table->foreignId('airplane_id')->constrained()->onDelete('cascade');
             $table->foreignId('airline_company_id')->constrained()->onDelete('cascade');
             $table->double('min_price');
+            $table->integer('available_seats');
+            $table->integer('seats_capacity');
+            $table->text('seats_map');
             $table->timestamps();
         });
     }

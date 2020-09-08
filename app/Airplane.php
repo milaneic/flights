@@ -15,4 +15,9 @@ class Airplane extends Model
     {
         return $this->belongsTo(Manufacture::class);
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

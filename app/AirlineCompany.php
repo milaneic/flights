@@ -16,4 +16,14 @@ class AirlineCompany extends Model
     {
         return $this->hasOneOrMany(Flight::class);
     }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function baggage_policies()
+    {
+        return $this->hasMany(BaggagePolicy::class);
+    }
 }

@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         //
         factory(User::class, 100)->create()->each(function ($user) {
-            $role = Role::find(3);
+            $role = Role::where('slug', 'user')->first();
             $user->roles()->save($role);
         });
     }

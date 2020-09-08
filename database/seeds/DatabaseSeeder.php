@@ -2,6 +2,7 @@
 
 use App\AirlineCompany;
 use App\Baggage;
+use App\BaggagePolicy;
 use App\Booking;
 use App\Country;
 use App\Destination;
@@ -17,14 +18,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(CountrySeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(CountrySeeder::class);
-        $this->call(DestinationSeeder::class);
-        $this->call(AirlineCompanySeeder::class);
-        $this->call(BaggageSeeder::class);
         $this->call(ManufactureSeeder::class);
         $this->call(AirplaneSeeder::class);
+        $this->call(BaggageSeeder::class);
+        $this->call(AirlineCompanySeeder::class);
+        $this->call(BaggagePolicySeeder::class);
         $this->call(FlightSeeder::class);
     }
 }

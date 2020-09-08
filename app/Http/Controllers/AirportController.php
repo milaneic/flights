@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Airport;
+use App\Destination;
 use Illuminate\Http\Request;
 
 class AirportController extends Controller
@@ -15,6 +16,7 @@ class AirportController extends Controller
     public function index()
     {
         //
+        return view('admin.airports.index', ['airports' => Airport::paginate(20)]);
     }
 
     /**
@@ -25,6 +27,7 @@ class AirportController extends Controller
     public function create()
     {
         //
+        return view('admin.airports.create', ['destinations' => Destination::all()]);
     }
 
     /**
@@ -36,6 +39,14 @@ class AirportController extends Controller
     public function store(Request $request)
     {
         //
+        $input = $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'destination_id' => ['required']
+            ]
+        );
+        Airport::create($input);
+        return redirect()->route('airports.index');
     }
 
     /**
@@ -47,6 +58,7 @@ class AirportController extends Controller
     public function show(Airport $airport)
     {
         //
+        return view('admin.airports.show', ['airport' => $airport, 'destinations' => Destination::all()]);
     }
 
     /**
@@ -58,6 +70,7 @@ class AirportController extends Controller
     public function edit(Airport $airport)
     {
         //
+        return view('admin.airports.edit', ['airport' => $airport, 'destinations' => Destination::all()]);
     }
 
     /**
@@ -70,6 +83,14 @@ class AirportController extends Controller
     public function update(Request $request, Airport $airport)
     {
         //
+        $input = $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'destination_id' => ['required']
+            ]
+        );
+        $airport->update($input);
+        return redirect()->route('airports.index');
     }
 
     /**
@@ -81,5 +102,7 @@ class AirportController extends Controller
     public function destroy(Airport $airport)
     {
         //
+        $airport->delete();
+        return redirect()->route('airports.index');
     }
 }

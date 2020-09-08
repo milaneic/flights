@@ -9,7 +9,7 @@ class Airport extends Model
     //
 
     protected $fillable = [
-        'destination_id', 'name'
+        'destination_id', 'name', 'ident',
     ];
 
 

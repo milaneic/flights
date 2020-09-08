@@ -58,6 +58,7 @@ class PassengerController extends Controller
     public function edit(Passenger $passenger)
     {
         //
+        return view('passengers.edit', ['passenger' => $passenger]);
     }
 
     /**
@@ -70,6 +71,18 @@ class PassengerController extends Controller
     public function update(Request $request, Passenger $passenger)
     {
         //
+        $inputs = $request->validate(
+            [
+                'first_name' => ['string', 'max:255', 'required'],
+                'last_name' => ['string', 'max:255', 'required'],
+                'document_type' => ['in:passport,card'],
+                'document_number' => ['required', 'digits:10'],
+                'gender' => ['in:female,male']
+            ]
+        );
+        // dd($inputs);
+        $passenger->update($inputs);
+        return back();
     }
 
     /**
@@ -81,5 +94,7 @@ class PassengerController extends Controller
     public function destroy(Passenger $passenger)
     {
         //
+        $passenger->delete();
+        return redirect()->route('passengers.index');
     }
 }

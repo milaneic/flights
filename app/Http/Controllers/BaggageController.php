@@ -15,6 +15,7 @@ class BaggageController extends Controller
     public function index()
     {
         //
+        return view('admin.baggages.index', ['baggages' => Baggage::all()]);
     }
 
     /**
@@ -25,6 +26,7 @@ class BaggageController extends Controller
     public function create()
     {
         //
+        return view('admin.baggages.create');
     }
 
     /**
@@ -36,6 +38,15 @@ class BaggageController extends Controller
     public function store(Request $request)
     {
         //
+        $inputs = $request->validate(
+            [
+                'type' => ['required', 'string', 'unique:baggage', 'max:255'],
+                'description' => ['required', 'string', 'min:20', 'max:500']
+            ]
+        );
+
+        Baggage::create($inputs);
+        return redirect()->route('baggages.index');
     }
 
     /**
@@ -47,6 +58,7 @@ class BaggageController extends Controller
     public function show(Baggage $baggage)
     {
         //
+        return view('admin.baggages.show', ['baggage' => $baggage]);
     }
 
     /**
@@ -58,6 +70,7 @@ class BaggageController extends Controller
     public function edit(Baggage $baggage)
     {
         //
+        return view('admin.baggages.edit', ['baggage' => $baggage]);
     }
 
     /**
@@ -70,6 +83,16 @@ class BaggageController extends Controller
     public function update(Request $request, Baggage $baggage)
     {
         //
+        $request->validate(
+            [
+                'description' => ['required', 'string', 'min:20', 'max:500']
+            ]
+        );
+        $baggage->description = $request['description'];
+        if ($baggage->isDirty()) {
+            $baggage->save();
+        }
+        return redirect()->route('baggages.index');
     }
 
     /**

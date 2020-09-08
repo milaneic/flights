@@ -14,6 +14,15 @@ class BaggageSeeder extends Seeder
     public function run()
     {
         //
-        factory(Baggage::class, 5)->create();
+        $baggages = [
+            ['type' => 'Free handed luggage', 'description' => 'Free carry on bag'],
+            ['type' => 'Trolley bag', 'description' => 'This baggage is free.'],
+            ['type' => 'Small check-in', 'description' => 'This baggage is free.'],
+            ['type' => 'Medium check-in', 'description' => 'This baggage is free.'],
+            ['type' => 'Big check-in', 'description' => 'This baggage is free.']
+        ];
+        foreach ($baggages as $b) {
+            Baggage::create($b);
+        }
     }
 }
