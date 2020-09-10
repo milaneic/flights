@@ -4,7 +4,7 @@
     @if (isset($passenger))
     <article class="blog_item">
         <div class="blog_details">
-            <h2>Your data</h2>
+            <h2>Check-in </h2>
             <hr>
             <form action="{{route('booking.check-store',[$booking,$i])}}" method="post">
                 @csrf
@@ -12,7 +12,7 @@
                 <input type="hidden" name="">
                 <div class="mt-10">
                     <label for="name">Name:</label>
-                    <input type="text" placeholder="Name" onfocus="this.placeholder = ''"
+                    <input type="text" placeholder="Name" onfocus="this.placeholder = ''" s
                         onblur="this.placeholder = 'Name'" required class="single-input"
                         value="{{$passenger->first_name}} {{$passenger->last_name}}">
                 </div>

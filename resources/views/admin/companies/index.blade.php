@@ -1,7 +1,7 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
+<x-admin-master>
+    @section('content')
     <h1>All airlines companies</h1>
+    <x-session-message></x-session-message>
     <h4 class="mt-5"><a href="{{route('companies.create')}}">Create a airline company</a></h4>
     <table class="table table-striped">
         <thead>
@@ -20,10 +20,10 @@
                 <td class="text-center">{{$company->country->name}}</td>
                 <td class="text-center">{{$company->email}}</td>
                 <td class="text-center">{{$company->phone}}</td>
-                <td class="text-center"><a href="{{route('companies.edit',$company)}}">Detalji</a></td>
+                <td class="text-center"><a href="{{route('companies.edit',$company)}}">Details</a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    @endsection
+</x-admin-master>

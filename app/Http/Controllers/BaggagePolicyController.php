@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BaggagePolicy;
+use App\AirlineCompany;
 use Illuminate\Http\Request;
 
 class BaggagePolicyController extends Controller
@@ -55,9 +56,12 @@ class BaggagePolicyController extends Controller
      * @param  \App\BaggagePolicy  $baggagePolicy
      * @return \Illuminate\Http\Response
      */
-    public function edit(BaggagePolicy $baggagePolicy)
+    public function edit($baggage_id, $airline_company_id)
     {
-        //
+        //   
+        $policy = BaggagePolicy::where('baggage_id', $baggage_id)->where('airline_company_id', $airline_company_id)->first();
+
+        return view('admin.policies.edit', ['policy' => $policy, 'baggage_id' => $baggage_id, 'airline_company_id' => $airline_company_id]);
     }
 
     /**
@@ -67,9 +71,19 @@ class BaggagePolicyController extends Controller
      * @param  \App\BaggagePolicy  $baggagePolicy
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BaggagePolicy $baggagePolicy)
+    public function update(Request $request, $baggage_id, $airline_company_id)
     {
         //
+        $inputs = $request->validate([
+            'baggage_id' => ['required', 'integer', 'digits:1'],
+            'airline_company_id' => ['required', 'integer', 'digits:1'],
+            'price' => ['required', 'gt:10', 'regex:/^\d*(\.\d{2})?$/']
+        ]);
+        //$policy = BaggagePolicy::where('baggage_id', $request['baggage_id'])->where('airline_company_id', $request['airline_company_id'])->first();
+        $company = AirlineCompany::findOrFail($airline_company_id);
+        $policy = $company->baggage_policies()->where('baggage_id', $baggage_id)->update(['price' => $request['price']]);
+        session()->flash('message', 'Policy price has been successfuly updated!');
+        return redirect()->back();
     }
 
     /**

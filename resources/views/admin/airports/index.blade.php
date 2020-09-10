@@ -54,6 +54,11 @@
             @endforeach
         </tbody>
     </table>
-    <ul class="text-center">{{$airports->links()}}</ul>
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <ul class="text-center">{{$airports->links()}}</ul>
+        </div>
+    </div>
+
     @endsection
 </x-admin-master>

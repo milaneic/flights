@@ -1,6 +1,7 @@
 @extends('layouts.app2')
 @section('content')
 <!-- bradcam_area  -->
+
 <div class="bradcam_area bradcam_bg_4">
     <div class="container">
         <div class="row">
@@ -14,7 +15,7 @@
     </div>
 </div>
 <!--/ bradcam_area  -->
-
+<x-session-message></x-session-message>
 <!-- ================ contact section start ================= -->
 <section class="contact-section">
     <div class="container">
@@ -25,7 +26,7 @@
                 tabindex="0"></iframe>
         </div>
 
-        <x-session-message></x-session-message>
+
         <div class="row">
             <div class="col-12">
                 <h2 class="contact-title">Get in Touch</h2>

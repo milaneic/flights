@@ -88,6 +88,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/baggages/{baggage}', 'BaggageController@show')->name('baggages.show');
     Route::resource('admin/baggages', 'BaggageController', ['middleware' => ['auth', 'role:admin']]);
 
+    //Routes for baggage policies
+    Route::get('admin/policies/baggage/{baggage_id}/company/{airline_company_id}', 'BaggagePolicyController@edit')->name('policies.edit')->middleware(['auth', 'role:admin']);
+    Route::patch('admin/policies/baggage/{baggage_id}/company/{airline_company_id}', 'BaggagePolicyController@update')->name('policies.update')->middleware(['auth', 'role:admin']);
     //Routes for users
     Route::get('/user/{user}', 'UserController@show')->name('user.show')->middleware(['auth', 'can:view,user', 'verified']);
     Route::get('/users/{user}', 'UserController@edit')->name('users.edit')->middleware('can:view,user');
@@ -99,6 +102,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/flights/search', 'FlightController@search')->name('flight.search');
     // Route::get('/admin/flights', 'FlightController@index')->name('flights.index')->middleware(['auth', 'role:admin']);
     Route::resource('/admin/flights', 'FlightController')->middleware(['auth', 'role:admin']);
+    Route::post('/flights/filter', 'FlightController@filterAll')->name('flight.filter');
 
 
     //Route for passengers
@@ -221,9 +225,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/cf', function () {
         foreach (App\Flight::all() as $f) {
             if ($f->arrival_time === $f->departure_time) {
-                $r = rand(1, 9);
+                $r = rand(1, 24);
                 $d = Carbon::parse($f->arrival_time);
                 $f->arrival_time = $d->addHours($r);
+                echo $f->arrival_airport_id . 'airport ' . $f->arrival_time . '<br>';
                 $f->save();
             }
         }

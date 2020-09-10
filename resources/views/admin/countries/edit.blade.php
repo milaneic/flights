@@ -1,17 +1,17 @@
-@extends('layouts.app');
-@section('content')
-<div class="container">
+<x-admin-master>
+    @section('content')
     <h1>Edit a {{$country->name}}</h1>
     <form action="{{route('countries.update',$country)}}" method="post">
         @csrf
         @method('PATCH')
         <x-display-errors></x-display-errors>
-        <div class="form-group">
+        <x-session-message></x-session-message>
+        <div class="form-group col-md-6 col-lg-6 col-sm-12">
             <label for="name">Name:</label>
             <input type="text" name="name" id="name" class="form-control" value="{{$country->name}}">
         </div>
-        <div class="form-group">
-            <label for="country_code">Name:</label>
+        <div class="form-group col-md-6 col-lg-6     col-sm-12">
+            <label for="country_code">Country code:</label>
             <input type="text" name="country_code" id="country_code" class="form-control"
                 value="{{$country->country_code}}">
         </div>
@@ -42,11 +42,11 @@
             <tr>
                 <td class="text-center">{{++$i}}</td>
                 <td class="text-center">{{$destination->name}}</td>
-                <td class="text-center">{{$destination->description}}</td>
+                <td class="text-center">{{Str::limit($destination->description,80,'...')}}</td>
                 <td class="text-center"><a href="{{route('destinations.edit',$destination)}}">Details</a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    @endsection
+</x-admin-master>

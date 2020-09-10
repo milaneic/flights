@@ -58,9 +58,15 @@
 
             <x-admin.sidebar.flights-links>
             </x-admin.sidebar.flights-links>
+            <x-admin.sidebar.companies-links></x-admin.sidebar.companies-links>
+            <x-admin.sidebar.baggages-links>
+            </x-admin.sidebar.baggages-links>
             <x-admin.sidebar.airports-links></x-admin.sidebar.airports-links>
             <x-admin.sidebar.manufactures-links></x-admin.sidebar.manufactures-links>
+            <x-admin.sidebar.countries-links>
+            </x-admin.sidebar.countries-links>
             <x-admin.sidebar.destinations-links></x-admin.sidebar.destinations-links>
+
 
             {{-- @if(Auth::user()->userHasRole('Admin'))
             <x-admin.sidebar.admin-sidebar-users-links></x-admin.sidebar.admin-sidebar-users-links>

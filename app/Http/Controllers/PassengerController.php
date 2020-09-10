@@ -82,7 +82,8 @@ class PassengerController extends Controller
         );
         // dd($inputs);
         $passenger->update($inputs);
-        return back();
+        session()->flash('message', 'Passenger has been successfuly updated');
+        return redirect()->back();
     }
 
     /**

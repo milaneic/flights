@@ -15,7 +15,7 @@
             <tr>
                 <td class="text-center">{{$manufactur->name}}</td>
                 <td class="text-center">{{$manufactur->country->name}}</td>
-                <td class="text-center"><a href="{{route('manufactures.edit',$manufactur)}}">Detalji</a></td>
+                <td class="text-center"><a href="{{route('manufactures.edit',$manufactur)}}">Details</a></td>
             </tr>
             @endforeach
         </tbody>

@@ -17,7 +17,7 @@ class CountryController extends Controller
     public function index()
     {
         //
-        return view('admin.countries.index', ['countries' => Country::all()]);
+        return view('admin.countries.index', ['countries' => Country::paginate(20)]);
     }
 
     /**
@@ -91,8 +91,8 @@ class CountryController extends Controller
             ]
         );
         $country->update($inputs);
-
-        return redirect()->route('countries.index');
+        session()->flash('message', 'Country has been successfuly updated');
+        return redirect()->back();
     }
 
     /**

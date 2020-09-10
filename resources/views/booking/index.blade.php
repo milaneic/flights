@@ -74,15 +74,16 @@ to={{Str::lower($flight->destination_to->name)}} flights">
                 <div class="search_wrap">
                     <form class="search_form" action="{{route('flight.search')}}">
                         <div class="input_field">
-                            <input type="text" placeholder="Destination from" name="destination1"
+                            <input type="text" placeholder="Destination from" id="destination1" name="destination1"
                                 value="{{$request['destination1']}}">
                         </div>
                         <div class="input_field">
-                            <input type="text" placeholder="Destination to" name="destination2"
+                            <input type="text" placeholder="Destination to" id="destination2" name="destination2"
                                 value="{{$request['destination2'] ?? ''}}">
                         </div>
                         <div class="input_field">
-                            <input id="datepicker" placeholder="Date" name="date" value="{{$request['date'] ?? ''}}">
+                            <input id="datepicker" placeholder="Date" name="date" id="date"
+                                value="{{$request['date'] ?? ''}}">
                         </div>
                         <div class="input_field">
                             <input type="number" name="person" id="person" value="{{$request['person'] ?? ''}}" min="1"
@@ -111,44 +112,43 @@ to={{Str::lower($flight->destination_to->name)}} flights">
                     <div class="filter_bordered">
                         <div class="filter_inner">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="single_select">
-                                        <select>
-                                            <option data-display="Country">Country</option>
-                                            <option value="1">Africa</option>
-                                            <option value="2">canada</option>
-                                            <option value="4">USA</option>
-                                        </select>
+                                <form action="{{route('flight.filter')}}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="flights" value="{{json_encode($flights)}}">
+                                    <input type="hidden" name="destination1" id="d1">
+                                    <input type="hidden" name="destionation2" id="d2">
+                                    <input type="hidden" name="date" id="d">
+                                    <input type="hidden" name="person" id="p">
+                                    <div class="col-lg-12">
+                                        <div class="price-range">
+                                            <h4>Price rande:</h4>
+                                            <div id="slider"></div>
+                                            <input type="hidden" name="min_price" id='min_price'
+                                                value="{{$flights->min('min_price')}}">
+                                            <input type="hidden" name="max_price" id="max_price"
+                                                value="{{$flights->max('min_price')}}">
+                                            <p class="text-center" id="amount"></p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="single_select">
-                                        <select>
-                                            <option data-display="Travel type">Travel type</option>
-                                            <option value="1">advance</option>
-                                            <option value="2">advance</option>
-                                            <option value="4">premium</option>
-                                        </select>
+                                    <div class="col-lg-12">
+                                        <h4>Airline company:</h4>
+                                        @foreach (App\AirlineCompany::all() as $company)
+                                        <div class="mt-2">
+                                            <input type="checkbox" name="company[]" value="{{$company->id}}"
+                                                class="form-control company" id="">{{$company->name}}
+                                        </div>
+                                        @endforeach
                                     </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="range_slider_wrap">
-                                        <span class="range">Prise range</span>
-                                        <div id="slider-range"></div>
-                                        <p>
-                                            <input type="text" id="amount" readonly
-                                                style="border:0; color:#7A838B; font-weight:400;">
-                                        </p>
+                                    <div class="reset_btn">
+                                        <button class="boxed-btn4" id="filter" type="submit">Search</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
-
-
                         </div>
 
-                        <div class="reset_btn">
+                        {{-- <div class="reset_btn">
                             <button class="boxed-btn4" type="submit">Reset</button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -193,4 +193,43 @@ to={{Str::lower($flight->destination_to->name)}} flights">
         </div>
     </div>
 </div>
+@endsection.
+@section('script')
+<script>
+    $(document).ready(function(){
+        
+        $('.company').click(function(){
+            var companies=[];
+           if($(this).is(':checked')){
+               companies.push($(this).val());
+           }else{
+            companies.pop($(this).val());
+           }
+        });
+        
+        $('#d1').val($('#destination1').val());
+        $('#d2').val($('#destination2').val());
+        $('#d').val($('#date').val());
+        $('#p').val($('#person').val());
+
+        var min=parseInt($('#min_price').val());
+        var max=parseInt($('#max_price').val());
+        
+        $('#amount').html(min+' - '+max+' eur');
+        $('#slider').slider({
+            range:true,
+            min:min,
+            max:max,
+            values:[min,max],
+                slide:function(event,ui){
+                    console.log(ui.values[0],ui.values[1]);
+                    $('#amount').html(ui.values[0]+' - '+ui.values[1]+' eur');
+                    $('#min_price').val(ui.values[0]);
+                    $('#max_price').val(ui.values[1]);
+                }
+
+        });
+        
+});
+</script>
 @endsection

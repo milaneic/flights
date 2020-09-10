@@ -21,4 +21,11 @@ class Ticket extends Model
     {
         return $this->hasOne(Passenger::class, 'id', 'passenger_id');
     }
+
+    public  function getSeat($id)
+    {
+        $ticket = $this;
+        $plane_seats = json_decode($ticket->booking->flight->airplane->seats);
+        return $plane_seats[$id - 1]->seat;
+    }
 }

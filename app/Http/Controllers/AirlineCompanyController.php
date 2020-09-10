@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\AirlineCompany;
+use App\BaggagePolicy;
 use App\Country;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class AirlineCompanyController extends Controller
 {
@@ -40,17 +42,22 @@ class AirlineCompanyController extends Controller
     public function store(Request $request)
     {
         //
+        //dd($request['bags'][0]);
         $input = $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
                 'country_id' => ['required', 'integer'],
                 'email' => ['required', 'email', 'unique:airline_companies'],
-                'phone' => ['required', 'string', 'min:5']
+                'phone' => ['required', 'string', 'gt:5'],
+                'bags.*' => ['required', 'gt:10', 'regex:/^\d*(\.\d{2})?$/']
             ]
         );
-
-        AirlineCompany::create($input);
-
+        $company = AirlineCompany::create($input);
+        DB::table('baggage_policies')->insert(['baggage_id' => 1, 'airline_company_id' => $company->id, 'price' => 0]);
+        for ($i = 2; $i < 6; $i++) {
+            DB::table('baggage_policies')->insert(['baggage_id' => $i, 'airline_company_id' => $company->id, 'price' => $request['bags'][$i - 2]]);
+        }
+        session()->flash('message', 'Airline company has been successfuly created');
         return redirect()->route('companies.index');
     }
 
@@ -88,17 +95,27 @@ class AirlineCompanyController extends Controller
     public function update(Request $request, AirlineCompany $company)
     {
         //
-
+        //dd($request->all());
         $input = $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
                 'country_id' => ['required', 'integer'],
                 'email' => ['required', 'unique:airline_companies,email,' . $company->id],
-                'phone' => ['required', 'string', 'min:5']
+                'phone' => ['required', 'string', 'gt:5'],
+                'bags.*' => ['required', 'gt:2', 'regex:/^\d*(\.\d{2})?$/']
             ]
         );
+        $bags = $request['bags'];
+        for ($i = 2; $i < 6; $i++) {
+            $policy = $company->baggage_policies()->where('baggage_id', $i)->first();
+            $price_from_input = $bags[$i - 2];
+            if ($policy->price != $price_from_input) {
+                $company->baggage_policies()->where('baggage_id', $i)->update(['price' => $price_from_input]);
+            }
+        }
         $company->update($input);
-        return redirect()->route('companies.index');
+        session()->flash('message', 'Airline company is successfuly updated');
+        return redirect()->back();
     }
 
     /**

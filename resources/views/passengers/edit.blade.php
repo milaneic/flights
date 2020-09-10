@@ -1,16 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 @section('content')
 <div class="container">
-    <h1>{{$passenger->id}} </h1>
-    @if ($errors->any())
-    <div class="alert alert-danger mt-5">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
+    <h1>Passenger number: {{$passenger->id}} </h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <form action="{{route('passenger.update',$passenger)}}" method="post">
         @csrf
         @method('PATCH')

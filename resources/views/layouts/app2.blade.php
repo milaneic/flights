@@ -11,7 +11,9 @@
     <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('img/favicon.png')}}">
     <!-- Place favicon.ico in the root directory -->
-
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+        integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
     <!-- CSS here -->
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}">
@@ -25,6 +27,7 @@
     <link rel="stylesheet" href="{{asset('css/slick.css')}}">
     <link rel="stylesheet" href="{{asset('css/slicknav.css')}}">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
@@ -55,13 +58,14 @@
                                         <ul id="navigation">
                                             <li><a class="active" href="{{URL('/')}}">home</a></li>
                                             <li><a href="{{URL('/about')}}">About</a></li>
-                                            <li><a class="" href="travel_destination.html">Destination</a></l/li> <li><a
-                                                    href="#">pages <i class="ti-angle-down"></i></a>
-                                                <ul class="submenu">
-                                                    <li><a href="destination_details.html">Destinations details</a></li>
-                                                    <li><a href="elements.html">elements</a></li>
-                                                </ul>
+                                            <li><a class="" href="{{URL('/explore')}}">Destination</a>
                                             </li>
+                                            {{--<a href="#">pages <i class="ti-angle-down"></i></a>
+                                            <ul class="submenu">
+                                                <li><a href="destination_details.html">Destinations details</a></li>
+                                                <li><a href="elements.html">elements</a></li>
+                                            </ul>
+                                            </li> --}}
                                             {{-- <li><a href="#">blog <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
                                                     <li><a href="blog.html">blog</a></li>
@@ -323,7 +327,6 @@
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
     <script src="{{asset('js/mail-script.js')}}"></script>
 
-
     <script src="{{asset('js/main.js')}}"></script>
     <script>
         $('#datepicker').datepicker({
@@ -333,6 +336,7 @@
          }
         });
     </script>
+    @yield('script')
 </body>
 
 </html>

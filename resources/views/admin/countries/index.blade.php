@@ -1,6 +1,7 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
+<x-admin-master>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
+    @section('content')
     <h1>All countries</h1>
     <table class="table table-striped mt-5">
         <thead>
@@ -25,5 +26,10 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            {{$countries->links()}}
+        </div>
+    </div>
+    @endsection
+</x-admin-master>

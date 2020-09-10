@@ -69,7 +69,7 @@
                         href="{{route('booking.check-in',$booking,$i=0)}}" class="genric-btn success-border">Check
                         in</a>
                         @endif
-                        <a href="" class="genric-btn primary">Details</a>
+                        <a href="{{route('booking.show',$booking)}}" class="genric-btn primary">Details</a>
 
                 </div>
             </div>

@@ -1,16 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 @section('content')
-<div class="container">
-    <h1>Create a new airline company</h1>
-    @if ($errors->any())
-    <div class="alert alert-danger mt-5">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
+
+<div class="container mb-5">
+    <h1>{{$company->name}}</h1>
     <div class="form-group">
         <label for="Name">Name:</label>
         <input type="text" name="name" id="name" class="form-control" value="{{$company->name}}">
@@ -27,5 +19,16 @@
         <label for="country_id">Country:</label>
         <input type="text" name="country_id" id="country_id" class="form-control" value="{{$company->country->name}}">
     </div>
-
-    @endsection
+    <h3>Bagage price policies</h3>
+    <ul class="unordered-list mb-5">
+        @foreach ($company->baggage_policies()->get() as $policy)
+        @if ($policy->baggage_id==1)
+        <li>{{$policy->baggage->type}} price: <strong>free</strong></li>
+        @else
+        <li>{{$policy->baggage->type}} price: <strong>{{$policy->price}}</strong></li>
+        @endif
+        @endforeach
+    </ul>
+    <a href="{{URL::previous()}}" class="genric-btn primary-border">Go back</a>
+</div>
+@endsection

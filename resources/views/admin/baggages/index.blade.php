@@ -1,6 +1,5 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
+<x-admin-master>
+    @section('content')
     <h1>All baggages</h1>
     <table class="table table-striped">
         <thead>
@@ -25,5 +24,5 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    @endsection
+</x-admin-master>

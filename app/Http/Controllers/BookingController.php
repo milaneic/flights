@@ -231,7 +231,7 @@ class BookingController extends Controller
         } else {
             $ticket = $booking->tickets->get($i);
             $passenger = $ticket->passenger;
-            dd($passenger);
+            // dd($passenger);
             $passenger->update($data);
             return redirect()->route('booking.check-in', [$booking, ++$i]);
         }

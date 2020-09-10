@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 @section('content')
-<div class="container">
+<div class="container mb-5">
     <h1 class="text-center">
         Choose a baggage
     </h1>
@@ -46,6 +46,7 @@
                                                 <h5 class="card-title">{{$baggage->type}}</h5>
                                                 <h6>Description</h6>
                                                 <p>{{$baggage->description}}</p>
+                                                <p>Price: <strong>{{$policies->price}} eur</strong></p>
                                             </div>
                                         </div>
                                         <div class="col-md-4  m-auto">

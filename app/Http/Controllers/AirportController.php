@@ -42,7 +42,8 @@ class AirportController extends Controller
         $input = $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
-                'destination_id' => ['required']
+                'destination_id' => ['required', 'integer'],
+                'ident' => ['required', 'string', 'max:4', 'unique:airports,ident']
             ]
         );
         Airport::create($input);
@@ -82,15 +83,17 @@ class AirportController extends Controller
      */
     public function update(Request $request, Airport $airport)
     {
-        //
+
         $input = $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
-                'destination_id' => ['required']
+                'destination_id' => ['required', 'integer'],
+                'ident' => ['required', 'string', 'max:4', 'unique:airports,ident']
             ]
         );
         $airport->update($input);
-        return redirect()->route('airports.index');
+        session()->flash('message', 'Airport is updated!');
+        return redirect()->route('manufactures.index');
     }
 
     /**

@@ -3,6 +3,7 @@
 
 You have a new message from <strong>{{$data['name']}}</strong>
 <br>
+<h4>Email: {{$data['email']}}</h4>
 <hr>
 <h4>Subject: {{$data['subject']}}</h4>
 <h5>Message:</h5>

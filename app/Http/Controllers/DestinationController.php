@@ -104,16 +104,18 @@ class DestinationController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
         $destination->update($inputs);
-        if (count($destination->images) > 0) {
-            $destination->images()->delete();
-        }
-        // dd($request->all());
-        $files = $request->file('file');
-        foreach ($files as $file) {
-            $img = $file->store('images/destinations', 'public');
-            $destination->images()->create(
-                ['url' => $img]
-            );
+        if ($request->has('images')) {
+            if (count($destination->images) > 0) {
+                $destination->images()->delete();
+            }
+            // dd($request->all());
+            $files = $request->file('file');
+            foreach ($files as $file) {
+                $img = $file->store('images/destinations', 'public');
+                $destination->images()->create(
+                    ['url' => $img]
+                );
+            }
         }
 
         session()->flash('message', 'Destination has been sucessfuly updated!');

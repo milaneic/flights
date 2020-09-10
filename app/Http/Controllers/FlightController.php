@@ -66,7 +66,7 @@ class FlightController extends Controller
             'gate' => ['required', 'integer'],
             'airplane_id' => ['required', 'integer'],
             'airline_company_id' => ['required', 'integer'],
-            'min_price' => ['required', 'numeric'],
+            'min_price' => ['required', 'regex:/^\d*(\.\d{2})?$/', 'gt:20'],
         ]);
         $airplane = Airplane::find($request['airplane_id'])->first();
         $available_seats = $airplane->capacity;
@@ -138,7 +138,7 @@ class FlightController extends Controller
                 'gate' => ['required', 'integer'],
                 'airplane_id' => ['required', 'integer'],
                 'airline_company_id' => ['required', 'integer'],
-                'min_price' => ['required', 'numeric']
+                'min_price' => ['required', 'gt:10', 'regex:/^\d*(\.\d{2})?$/']
             ]
         );
 
@@ -179,8 +179,9 @@ class FlightController extends Controller
         return redirect()->route('flights.index');
     }
 
-    public function search(Request $request)
+    public function search(Request $request, $flights = null)
     {
+        //  return dd($request->all());
         //validation flight if exist
         $data = $request->validate([
             'destination1' => ['required', 'string', 'exists:destinations,name'],
@@ -199,18 +200,23 @@ class FlightController extends Controller
             if ($request['date'] != null) {
                 $date = Carbon::parse($request['date'])->format('Y-m-d');
                 //$flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->get();
-                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->paginate(3)->appends($request->all());
+                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->paginate(5)->appends($request->all());
             } else {
-                $flights = Flight::whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->paginate(3)->appends($request->all());
+                $flights = Flight::whereIn('departure_airport_id', $airports1)->whereIn('arrival_airport_id', $airports2)->paginate(5)->appends($request->all());
             }
         } else {
 
             if ($request['date'] != null) {
                 $date = Carbon::parse($request['date'])->format('Y-m-d');
-                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->whereIn('departure_airport_id', $airports1)->paginate(3)->appends($request->all());
+                $flights = Flight::whereRaw('DATE(`departure_time`)=?', $date)->whereIn('departure_airport_id', $airports1)->paginate(5)->appends($request->all());
             } else {
-                $flights = Flight::whereIn('departure_airport_id', $airports1)->paginate(3)->appends($request->all());
+                $flights = Flight::whereIn('departure_airport_id', $airports1)->paginate(5)->appends($request->all());
             }
+        }
+
+        if (isset($request['companies'])) {
+            dd($request['companies']);
+            $searched = $flights->whereIn('airline_company_id', [$request['companies']])->get();
         }
 
         return view('booking.index', ['flights' => $flights, 'request' => $request->all()]);
@@ -240,25 +246,46 @@ class FlightController extends Controller
 
     public function filter(Request $request)
     {
+        // $ids = json_decode($request['result']);
+        // $result = Flight::whereIn('id', $ids);
+        // dd($request->all());
+        //dd($request['date'] != null);
+        if ($request['date'] != null) {
+            $result = Flight::where('departure_airport_id', $request['destination1'])->whereRaw('DATE(`departure_time`)=?', $request['date']);
+        } else {
+            $result = Flight::where('departure_airport_id', $request['destination1']);
+        }
 
-        // $d = Destination::where('name', $request['destination1'])->first();
-        // $aiports = Airport::select('id')->where('destination_id', $d->id)->get();
-        // if ($request['date'] != null) {
-        //     //viidi da li moze findOrFail sa name ili samo id 
-        //     $result = Flight::whereIn('departure_airport_id', $aiports)->whereRaw('DATE(`departure_time`)=?', $request['date'])->get();
-        //     return view('explore', ['result' => $result]);
-        // } else {
-        //     $result = Flight::whereIn('departure_airport_id', $aiports)->paginate(10);
-        // }
+        if (isset($request['min_price']) && isset($request['max_price'])) {
+            $result = $result->whereBetween('min_price', [$request['min_price'], $request['max_price']]);
+        }
 
-        // $d = Destination::where('name', $request['destination1'])->first();
+        if (isset($request['company'])) {
+            $company = $request['company'];
+            $result = $result->whereIn('airline_company_id', [implode(',', $company)]);
+        }
+        //$result = Flight::where('departure_airport_id', $request['destination1'])->whereRaw('DATE(`departure_time`)=?', $request['daate'])->get();
 
+        return view('explore', ['result' => $result->paginate(5), 'destination1' => $request['destination1']]);
+    }
 
-        // $aiports = Airport::select('id')->where('destination_id', $request['destination1'])->get();
-        // return  $request->all();
+    public function filterAll(Request $request)
+    {
+        $flights = json_decode($request['flights']);
+        $ids = [];
+        foreach ($flights->data as $f) {
+            array_push($ids, $f->id);
+        }
+        $flights = Flight::whereIn('id', [implode(',', $ids)]);
+        if (isset($request['min_price']) && isset($request['max_price'])) {
+            $flights = $flights->whereBetween('min_price', [$request['min_price'], $request['max_price']]);
+        }
 
-        $result = Flight::all();
+        if (isset($request['company'])) {
+            $company = $request['company'];
+            $flights = $flights->whereIn('airline_company_id', [implode(',', $company)]);
+        }
 
-        return $result;
+        return view('booking.index', ['flights' => $flights->paginate(5), 'request' => $request->all()]);
     }
 }
