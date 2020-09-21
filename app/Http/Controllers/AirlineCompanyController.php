@@ -101,7 +101,7 @@ class AirlineCompanyController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'country_id' => ['required', 'integer'],
                 'email' => ['required', 'unique:airline_companies,email,' . $company->id],
-                'phone' => ['required', 'string', 'gt:5'],
+                'phone' => ['required', 'string', 'min:6'],
                 'bags.*' => ['required', 'gt:2', 'regex:/^\d*(\.\d{2})?$/']
             ]
         );
@@ -128,6 +128,8 @@ class AirlineCompanyController extends Controller
     {
         //
         $company->delete();
+        session()->flash('message', 'A ' . $company->name . ' was sucessfuly deleted!');
+        session()->flash('alert-class', 'alert-danger');
         return redirect()->route('companies.index');
     }
 }

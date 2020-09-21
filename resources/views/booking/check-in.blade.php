@@ -5,10 +5,12 @@
     <article class="blog_item">
         <div class="blog_details">
             <h2>Check-in </h2>
+
             <hr>
             <form action="{{route('booking.check-store',[$booking,$i])}}" method="post">
                 @csrf
                 <x-display-errors></x-display-errors>
+                <x-session-message></x-session-message>
                 <input type="hidden" name="">
                 <div class="mt-10">
                     <label for="name">Name:</label>
@@ -57,6 +59,7 @@
             <form action="{{route('booking.check-store',[$booking,0])}}" method="post">
                 @csrf
                 <x-display-errors></x-display-errors>
+                <x-session-message></x-session-message>
                 <div class="mt-10">
                     <label for="name">Name:</label>
                     <input type="text" placeholder="Name" onfocus="this.placeholder = ''"

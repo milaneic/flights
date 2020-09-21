@@ -1,6 +1,8 @@
 <x-admin-master>
     @section('content')
     <h1>All flights</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <table class="table table-striped">
         <thead>
             <tr>

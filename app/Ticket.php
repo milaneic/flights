@@ -26,6 +26,9 @@ class Ticket extends Model
     {
         $ticket = $this;
         $plane_seats = json_decode($ticket->booking->flight->airplane->seats);
-        return $plane_seats[$id - 1]->seat;
+        if ($id != 0) {
+            return $plane_seats[$id - 1]->seat;
+        }
+        return $plane_seats[$id]->seat;
     }
 }

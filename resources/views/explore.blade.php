@@ -1,9 +1,7 @@
 @extends('layouts.app2')
 @section('content')
 <div class="container mb-5">
-    {{-- @php
-    dd($destination1 ?? '',$date ?? '')
-    @endphp --}}
+
     <h1 class="text-center">Explore the world</h1>
     <hr class="mt-5">
     <form action="{{route('explore.search')}}" method="get">
@@ -39,54 +37,47 @@
 @if ($result ?? ''!=null && count($result)>0)
 <hr class="mt-5">
 <div class="row">
-
     <div class="col-md-2 m-3">
-        <form action="{{route('explore.filter')}}" method="POST">
-            @csrf
-            @php
-            $ids=[];
-            foreach ($result as $flights) {
-            array_push($ids,$flights->id);
-            }
-            @endphp
-            <input type="text" name="destination1" id="destination">
-            <input type="textw" name="date" id="date2">
-            <input type="hidden" name="result" value="{{json_encode($ids)}}">
-            <h3>Filter:</h3>
+        @csrf
+        @php
+        $ids=[];
+        foreach ($result as $flights) {
+        array_push($ids,$flights->id);
+        }
+        @endphp
+        <input type="hidden" id="ids" value="{{json_encode($ids)}}">
+        <h3>Filter:</h3>
+        <hr>
+        <div class="price-range">
+            <h5>Price range:</h5>
+            <div id="slider"></div>
+            <input type="hidden" name="min_price" id='min_price' value="{{$result->min('min_price')}}">
+            <input type="hidden" name="max_price" id="max_price" value="{{$result->max('min_price')}}">
+            <p class="text-center" id="amount"></p>
+        </div>
+        <div class="airlines">
+            <div class="title">
+                <h5>Airlines</h5>
+            </div>
             <hr>
-            <div class="price-range">
-                <h5>Price rande:</h5>
-                <div id="slider"></div>
-                <input type="hidden" name="min_price" id='min_price' value="{{$result->min('min_price')}}">
-                <input type="hidden" name="max_price" id="max_price" value="{{$result->max('min_price')}}">
-                <p class="text-center" id="amount"></p>
+            <div class="airlines p-2">
+                @foreach (App\AirlineCompany::all() as $item)
+                <input type="checkbox" class="company" name="company" id="{{$item->name}}" value="{{$item->id}}">
+                {{$item->name}}
+                <br>
+                @endforeach
+                <input type="hidden" id="companies">
             </div>
-            <div class="airlines">
-                <div class="title">
-                    <h5>Airlines</h5>
-                </div>
-                <hr>
-                <div class="airlines p-2">
-                    @foreach (App\AirlineCompany::all() as $item)
-                    <input type="checkbox" name="company[]" id="{{$item->name}}" value="{{$item->id}}">
-                    {{$item->name}}
-                    <br>
-                    @endforeach
-                </div>
-            </div>
-            <div class="airports">
-                <h5>Airports</h5>
-                <hr>
-            </div>
-            <div class="text-center"><button type="submit" id="filter" class="boxed-btn4">Filter</button></div>
-        </form>
+        </div>
+
+        <div class="text-center"><button type="submit" id="filter" class="boxed-btn4">Filter</button></div>
     </div>
     <div class="col-md-8">
 
 
         <h2 class="text-center">Searched flights</h2>
 
-        <div id="result">
+        <div id="result" class="mb-5">
             @foreach ($result as $item)
             <div class="card mt-3">
                 <div class="card-body d-flex">
@@ -109,11 +100,9 @@
                                 @php
                                 $time_departure=\Carbon\Carbon::parse($item->departure_time);
                                 $time_arrival=\Carbon\Carbon::parse($item->arrival_time);
-                                $flight_duration=$time_departure->diff($time_arrival)->format('%hh%im ');
-                                //dd($flight_duration); @endphp <div class="time">
-                                    @endphp
-                                    <h4>{{$flight_duration}}</h4>
-                                </div>
+                                $flight_duration=$time_departure->diff($time_arrival)->format('%hh%im');
+                                @endphp
+                                <h4>{{$flight_duration}}</h4>
                                 <p>{{$item->airport_from->ident}} - {{$item->airport_to->ident}}</p>
                             </div>
                         </div>
@@ -128,71 +117,78 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             @endforeach
         </div>
-        <span style="margin: 0 auto;">{{$result->links()}}</span>
-        @endif
-
     </div>
+    <span style="margin: 0 auto;">{{$result->links()}}</span>
+
 </div>
+</div>
+@else
+<div class="container d-flex justify-content-center mt-5 mb-5">
+    <h1>There is no search results</h1>
+</div>
+@endif
+
 @endsection
 @section('script')
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     $(document).ready(function(){
-        // $('#filter').click(function(){
-        //     var companies=[];
-        //     var destination1=$('#destination1').val();
-        //     var date=$('#date').val();
-        //   $('.airline').each(function(){
-        //       if($(this).is(':checked')){
-        //           companies.push($(this).val());
-        //       }
-              
-        //   });
-          
-        //   var Companies=companies.toString();
-        //   //ajax
-        //   $.ajax({
-        //       type:'get',
-        //       dataType:'    ',
-        //       url:'{{URL("explore.filter")}}',
-        //       data:{
-        //           destination1:destination1,date:date,Companies:Companies
-        //       },
-        //       success:function(result){
-        //         console.log(result);
-        //       }
-        //   })
-        // });
-        $('#destination').val($('#destination1').val());
-            $('#date2').val($('#date').val())
-        $('.change').each(function(){
-           $('.change').on('change',function(){
-            $('#destination').val($('#destination1').val());
-            $('#date2').val($('#date').val())
-           });
-        })
-        var min=parseInt($('#min_price').val());
-        var max=parseInt($('#max_price').val());
-        
-        $('#amount').html(min+' - '+max+' eur');
-        $('#slider').slider({
-            range:true,
-            min:min,
-            max:max,
-            values:[min,max],
-                slide:function(event,ui){
-                    console.log(ui.values[0],ui.values[1]);
-                    $('#amount').html(ui.values[0]+' - '+ui.values[1]+' eur');
-                    $('#min_price').val(ui.values[0]);
-                    $('#max_price').val(ui.values[1]);
-                }
-
-        });
-    });
+                
+                
+                $('.company').click(function(){
+                    var companies=[];   
+                    $("input:checkbox[name=company]:checked").each(function(){
+                        companies.push($(this).val());
+                        
+                    });
+                    $('#companies').val(companies);
+                });
+                
+                var min=parseInt($('#min_price').val());
+                var max=parseInt($('#max_price').val());
+                
+                $('#amount').html(min+' - '+max+' eur');
+                
+                $('#slider').slider({
+                    range:true,
+                    min:min,
+                    max:max,
+                    values:[min,max],
+                    slide:function(event,ui){
+                        console.log(ui.values[0],ui.values[1]);
+                        $('#amount').html(ui.values[0]+' - '+ui.values[1]+' eur');
+                        $('#min_price').val(ui.values[0]);
+                        $('#max_price').val(ui.values[1]);       
+                    }
+                });
+                
+                $('#filter').click(function(){
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type:'get',
+                        url:'/filter2',
+                        data:{
+                            ids:$('#ids').val(),
+                            companies:$('#companies').val(),
+                            min:$('#min_price').val(),
+                            max:$('#max_price').val(),
+                        },
+                        success: function(result){
+                            $('#result').html('');
+                            var html=result.html;
+                            $('#result').html(html);
+                        }
+                    });
+                });
+                
+            });
 </script>
 @endsection

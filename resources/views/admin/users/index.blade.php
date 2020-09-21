@@ -1,8 +1,10 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
-    <h1>All users</h1>
+<x-admin-master>
+    @section('content')
 
+
+    <h1>All users</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -21,9 +23,10 @@
                 <td class="text-center">{{++$i}}</td>
                 <td class="text-center">{{$user->name}}</td>
                 <td class="text-center">{{$user->email}}</td>
+                <td class="text-center"><a href="{{route('users.edit',$user)}}" class="btn btn-primary">Detail</a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    @endsection
+</x-admin-master>

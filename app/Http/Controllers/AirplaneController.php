@@ -95,6 +95,7 @@ class AirplaneController extends Controller
         );
 
         $airplane->update($input);
+        session()->flash('message', 'A ' . $airplane->model . ' has been successfuly updated!');
         return back();
     }
 
@@ -108,6 +109,8 @@ class AirplaneController extends Controller
     {
         //
         $airplane->delete();
+        session()->flash('message', 'A ' . $airplane->model . ' has been successfuly updated!');
+        session()->flash('alert-class', 'alert-danger');
         return redirect()->route('airplanes.index');
     }
 }

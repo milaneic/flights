@@ -84,16 +84,21 @@ class AirportController extends Controller
     public function update(Request $request, Airport $airport)
     {
 
+        //dd($request->all());
+
         $input = $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
                 'destination_id' => ['required', 'integer'],
-                'ident' => ['required', 'string', 'max:4', 'unique:airports,ident']
+                'ident' => ['required', 'string', 'max:4', 'unique:airports,ident,' . $airport->id]
             ]
         );
-        $airport->update($input);
-        session()->flash('message', 'Airport is updated!');
-        return redirect()->route('manufactures.index');
+        $airport->destination_id = $input['destination_id'];
+        $airport->name = $input['name'];
+        $airport->ident = $input['ident'];
+        $airport->save();
+        session()->flash('message', 'Airport ' . $airport->name . ' is updated!');
+        return back();
     }
 
     /**

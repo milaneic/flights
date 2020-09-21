@@ -1,9 +1,11 @@
 <x-admin-master>
     @section('content')
+    <h1>Create a airline company</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <form action="{{route('companies.store')}}" method="post">
         @csrf
         @method('POST')
-        <x-display-errors></x-display-errors>
         <div class="form-group col-lg-6 col-md-6 col-sm-12">
             <label for="Name">Name:</label>
             <input type="text" name="name" id="name" class="form-control" placeholder="Please enter company name...">

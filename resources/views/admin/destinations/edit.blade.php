@@ -1,11 +1,12 @@
 <x-admin-master>
     @section('content')
-    <x-display-errors></x-display-errors>
-    <x-session-message></x-session-message>
+
     <form action="{{route('destinations.update',$destination)}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
         <h1>Edit a {{$destination->name}}</h1>
+        <x-display-errors></x-display-errors>
+        <x-session-message></x-session-message>
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" name="name" id="name" class="form-control"
@@ -33,6 +34,12 @@
             <input type="file" name="file[]" multiple id="image" class="form-file">
         </div>
         <button class="btn btn-primary" type="submit">Update a destination</button>
+    </form>
+    <br>
+    <form action="{{route('destinations.destroy',$destination)}}" method="POST">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete a destination</button>
     </form>
     @endsection
 </x-admin-master>

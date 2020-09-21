@@ -60,9 +60,9 @@ class FlightController extends Controller
         //
         $inputs = $request->validate([
             'departure_airport_id' => ['required', 'integer'],
-            'departure_time' => ['required', 'date'],
-            'arrival_airport_id' => ['required', 'integer'],
-            'arrival_time' => ['required', 'date'],
+            'departure_time' => ['required', 'date', 'after:now'],
+            'arrival_airport_id' => ['required', 'integer', 'different:departure_airport_id'],
+            'arrival_time' => ['required', 'date', 'after:departure_time'],
             'gate' => ['required', 'integer'],
             'airplane_id' => ['required', 'integer'],
             'airline_company_id' => ['required', 'integer'],
@@ -92,6 +92,7 @@ class FlightController extends Controller
         // array_push($inputs, $seats_map);
 
         // Flight::create($inputs);
+        session()->flash('message', 'A new flight is successfuly created!');
         return redirect()->route('flights.index');
     }
 
@@ -162,7 +163,7 @@ class FlightController extends Controller
         $flight->seats_map = $seats_map;
         $flight->update();
         // $flight->update($inputs);
-        session()->flash('message', 'The flight is updated!!!');
+        session()->flash('message', 'The flight number ' . $flight->id . ' is updated!!!');
         return back();
     }
 
@@ -176,11 +177,14 @@ class FlightController extends Controller
     {
         //
         $flight->delete();
+        session()->flash('message', 'Flight number ' . $flight->id . ' has been successfuly deleted!');
+        session()->flash('alert-class', 'alert-danger');
         return redirect()->route('flights.index');
     }
 
     public function search(Request $request, $flights = null)
     {
+        //dd($request->all());
         //  return dd($request->all());
         //validation flight if exist
         $data = $request->validate([
@@ -219,7 +223,7 @@ class FlightController extends Controller
             $searched = $flights->whereIn('airline_company_id', [$request['companies']])->get();
         }
 
-        return view('booking.index', ['flights' => $flights, 'request' => $request->all()]);
+        return view('booking.index', ['result' => $flights, 'request' => $request->all()]);
 
 
 
@@ -240,7 +244,7 @@ class FlightController extends Controller
             return view('explore', ['result' => $result, 'destination1' => $request['destination1'], 'date' => $request['date']]);
         } else {
             $result = Flight::whereIn('departure_airport_id', $aiports)->paginate(10)->appends('destination1', $request['destination1']);
-            return view('explore', ['result' => $result, 'destination1' => $request['destination1']]);
+            return view('explore', ['result' => $result, 'destination1' => $request['destination1'], 'i' => 1]);
         }
     }
 
@@ -287,5 +291,31 @@ class FlightController extends Controller
         }
 
         return view('booking.index', ['flights' => $flights->paginate(5), 'request' => $request->all()]);
+    }
+
+    public function filter2(Request $request)
+    {
+        $ids = json_decode($request['ids']);
+        $company = $request['companies'];
+        $min = $request['min'];
+        $max = $request['max'];
+
+        $result = Flight::whereIn('id', $ids)->get();
+        if ($company != '') {
+            $result = $result->whereIn('airline_company_id', explode(',', $company));
+            //$result = Flight::all();
+        }
+
+        if ($min != '' && $max != null) {
+            $result = $result->whereBetween('min_price', [$min, $max]);
+        }
+        if ($request['page'] == 'index') {
+            $returnHtml = view('partial-booking', ['result' => $result])->render();
+        } else {
+            $returnHtml = view('explore-partial', ['result' => $result])->render();
+        }
+
+        return response()->json(['html' => $returnHtml]);
+        //return $returnHtml;
     }
 }

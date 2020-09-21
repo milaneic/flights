@@ -45,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
     public function bookings()
@@ -71,6 +71,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function assignRole(Role $role)
     {
-        return $this->roles()->save($role);
+        return $this->roles()->attach($role);
+    }
+
+    public function detachRole(Role $role)
+    {
+        return $this->roles()->detach($role);
     }
 }

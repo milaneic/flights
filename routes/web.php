@@ -30,8 +30,17 @@ use function GuzzleHttp\json_encode;
 
 Route::group(['middleware' => 'web'], function () {
 
+    Route::get('/ajax', function () {
+        return view('ajax', ['flights' => Flight::limit(100)->get()]);
+    });
+
+    Route::get('/filter2', 'FlightController@filter2');
+
     //Nav routes
-    Route::get('/', 'HomeController@index');
+    Route::get('/', function () {
+        return view('flights.index');
+    });
+
     Route::get('/about', function () {
         return view('about');
     });
@@ -92,11 +101,12 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('admin/policies/baggage/{baggage_id}/company/{airline_company_id}', 'BaggagePolicyController@edit')->name('policies.edit')->middleware(['auth', 'role:admin']);
     Route::patch('admin/policies/baggage/{baggage_id}/company/{airline_company_id}', 'BaggagePolicyController@update')->name('policies.update')->middleware(['auth', 'role:admin']);
     //Routes for users
-    Route::get('/user/{user}', 'UserController@show')->name('user.show')->middleware(['auth', 'can:view,user', 'verified']);
-    Route::get('/users/{user}', 'UserController@edit')->name('users.edit')->middleware('can:view,user');
-    Route::patch('/users/{user}', 'UserController@update',)->middleware('can:update,user')->name('users.store');
+    Route::get('/user/{user}', 'UserController@show')->middleware(['auth', 'can:view,user', 'verified'])->name('user.show');
+    Route::get('/user/{user}/edit', 'UserController@editUser')->middleware('can:view,user')->name('user.edit');
+    Route::patch('/user/{user}/edit', 'UserController@update')->middleware('can:update,user')->name('user.update');
     Route::resource('admin/users', 'UserController')->middleware(['auth', 'role:admin']);
-
+    Route::post('/admin/user/{user}/role/{role}/attach', 'UserController@attach')->name('users.attach')->middleware(['auth', 'role:admin']);
+    Route::post('/admin/user/{user}/role/{role}/detach', 'UserController@detach')->name('users.detach')->middleware(['auth', 'role:admin']);
     //Routes for flights
     Route::get('/flight/{flight}', 'FlightController@show')->name('flight.show');
     Route::get('/flights/search', 'FlightController@search')->name('flight.search');
@@ -119,7 +129,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/booking/{booking}/baggage', 'BookingController@baggage')->middleware('auth')->name('booking.baggage');
     Route::post('/booking/{booking}/baggage', 'BookingController@make')->middleware('auth')->name('booking.make');
 
-    Route::get('/booking/{booking}/check-in/{i?}', 'BookingController@check_in')->middleware(['auth', 'can:view,booking'])->name('booking.check-in');
+    Route::get('/booking/{booking}/check-in/{i?}', 'BookingController@check_in')->name('booking.check-in')->middleware(['auth', 'can:view,booking']);
     Route::post('/booking/{booking}/check-in/{i?}', 'BookingController@check_store')->middleware(['auth'])->name('booking.check-store');
     // //Route for seat    
     // Route::get('/seat', function () {

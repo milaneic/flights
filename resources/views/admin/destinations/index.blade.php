@@ -1,6 +1,8 @@
 <x-admin-master>
     @section('content')
     <h1>All destinations</h1>
+    <x-session-message></x-session-message>
+    <x-display-errors></x-display-errors>
     <table class="table table-striped">
         <thead>
             <tr>

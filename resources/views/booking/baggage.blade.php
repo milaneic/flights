@@ -4,6 +4,8 @@
     <h1 class="text-center">
         Choose a baggage
     </h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <div id="accordion" class="mt-5">
         <form action="{{route('booking.make',$booking)}}" method="POST">
             @csrf
@@ -32,6 +34,7 @@
                         <p style="font-size: 20px">
                             Passenger first name: {{$passenger->first_name}}
                         </p>
+                        <p><strong>Free hand baggage is included for all passengers!</strong></p>
                         <div class="baggages">
 
                             @for ($i = 1; $i < count($company->baggage_policies); $i++)

@@ -1,8 +1,9 @@
 <x-admin-master>
-    <x-display-errors></x-display-errors>
-    <x-session-message></x-session-message>
+
     @section('content')
     <h1>Edit a airport</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <form action="{{route('airports.update',$airport)}}" method="post">
         @csrf
         @method('PATCH')

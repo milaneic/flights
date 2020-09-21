@@ -1,6 +1,8 @@
 <x-admin-master>
     @section('content')
     <h1>Airplane: {{$airplane->manufacture->name}} {{$airplane->model}}</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <form action="{{route('airplanes.update',$airplane)}}" method="POST">
         @csrf
         @method('PATCH')

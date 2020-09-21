@@ -27,6 +27,7 @@
     </div>
     <h2 class="mt-5">All passengers</h2>
     <p class="mb-5">Number of tickets for this booking: {{count($booking->tickets)}}</p>
+    <p class="mb-5">Total price of booking: {{$booking->amount}} eur</p>
     <div id="accordion mt-5">
         @foreach ($booking->tickets as $ticket)
         <div class="card">
@@ -48,11 +49,16 @@
                     <h5 class="mb-3">Ticket:</h5>
                     <div class="p-4">
                         <p style="font-size:18px">Ticket id: {{$ticket->id}}</p>
-                        <p style="font-size:18px">Amount: {{$ticket->price}} euro</p>
+                        <p style="font-size:18px">Ticket price: {{$ticket->price}} euro</p>
+                        @if ($booking->is_confirmed==0)
+                        <p style="font-size:18px">Seat number: Your seat will be assigned during check-in!</p>
+                        @else
                         <p style="font-size:18px">Seat number: {{$ticket->getSeat($ticket->seat)}}</p>
+                        @endif
                     </div>
                     <hr>
                     <h5>Passenger data:</h5>
+                    @if ($p->document_type!=null && $p->document_number!=null)
                     <div class="p-4">
                         <p style="font-size:18px">First name: {{$p->first_name}}</p>
                         <p style="font-size:18px">Last name: {{$p->last_name}}</p>
@@ -64,6 +70,13 @@
                         <p style="font-size:18px">Wrong data for passenger change it..</p>
                         <a href="{{route('passenger.edit',$p)}}" class="btn btn-primary">Edit a passenger</a>
                     </div>
+                    @else
+                    <p style="font-size:18px">First name: {{$p->first_name}}</p>
+                    <p style="font-size:18px">Last name: {{$p->last_name}}</p>
+                    <p style="font-size:18px">Gender: {{ucFirst(trans($p->gender))}}</p>
+                    <p style="font-size:18px">Document type: this will be displayed after check-in!</p>
+                    <p style="font-size:18px">Document number: this will be displayed after check-in!</p>
+                    @endif
                 </div>
             </div>
         </div>

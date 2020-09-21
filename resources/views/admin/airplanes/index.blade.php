@@ -1,7 +1,8 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
+<x-admin-master>
+    @section('content')
     <h1 class="mt-5">All ariplanes</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <table class="table table-striped mt-5">
         <thead>
             <tr>
@@ -28,5 +29,5 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection
+    @endsection
+</x-admin-master>

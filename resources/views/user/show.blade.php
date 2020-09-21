@@ -16,7 +16,9 @@
 </div>
 <!--/ bradcam_area  -->
 <div class="container">
-    <x-session-message></x-session-message>
+    <div class="mt-3">
+        <x-session-message></x-session-message>
+    </div>
     <article class="blog_item">
         <div class="blog_details">
             <h2>Your data</h2>

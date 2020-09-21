@@ -1,8 +1,12 @@
 <x-admin-master>
     @section('content')
     <h1>Create a flight</h1>
+    <x-display-errors></x-display-errors>
+    <x-session-message></x-session-message>
     <form action="{{route('flights.store')}}" method="post">
         @csrf
+        <input type="datetime-local" name="now" hidden
+            value="{{\Carbon\Carbon::now()->addHours(2)->format('Y-m-d\TH:i')}}" id="">
         <div class="form-group">
             <label for="departure_airport_id">Departure airport id:</label>
             <select name="departure_airport_id" id="departure_airport_id" class="form-control" style="width: 40%">

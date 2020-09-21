@@ -21,7 +21,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="name">Name:</label>
+            <label for="name">Description:</label>
             <textarea name="description" id="description" cols="100" class="form-control" rows="10"></textarea>
         </div>
         <div class="form-group">
