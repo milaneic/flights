@@ -193,10 +193,10 @@
                                 Company
                             </h3>
                             <ul class="links">
-                                <li><a href="#">Pricing</a></li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#"> Gallery</a></li>
-                                <li><a href="#"> Contact</a></li>
+                                <li><a href="{{URL('/')}}">Home</a></li>
+                                <li><a href="{{URL('/about')}}">About</a></li>
+                                <li><a href="{{URL('/explore')}}"> Explore</a></li>
+                                <li><a href="{{URL('/contact')}}"> Contact</a></li>
                             </ul>
                         </div>
                     </div>
@@ -206,14 +206,20 @@
                                 Popular destination
                             </h3>
                             <ul class="links double_links">
-                                <li><a href="#">Indonesia</a></li>
+                                @php
+                                $popular=DB::table('countries')->inRandomOrder()->limit(8)->get();
+                                @endphp
+                                @foreach ($popular as $item)
+                                <li><a href="{{route('countries.show',$item->id)}}">{{$item->name}}</a></li>
+                                @endforeach
+                                {{-- <li><a href="#">Indonesia</a></li>
                                 <li><a href="#">America</a></li>
                                 <li><a href="#">India</a></li>
                                 <li><a href="#">Switzerland</a></li>
                                 <li><a href="#">Italy</a></li>
                                 <li><a href="#">Canada</a></li>
                                 <li><a href="#">Franch</a></li>
-                                <li><a href="#">England</a></li>
+                                <li><a href="#">England</a></li> --}}
                             </ul>
                         </div>
                     </div>

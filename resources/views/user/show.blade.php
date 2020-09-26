@@ -18,6 +18,7 @@
 <div class="container">
     <div class="mt-3">
         <x-session-message></x-session-message>
+        <x-display-errors></x-display-errors>
     </div>
     <article class="blog_item">
         <div class="blog_details">
@@ -46,6 +47,9 @@
                 <input type="text" name="role" placeholder="Country" onfocus="this.placeholder = ''"
                     onblur="this.placeholder = 'Role'" required class="single-input" value="{{$role->name}}">
                 @endforeach
+            </div>
+            <div class="mt-3">
+                <a href="{{route('user.edit',$user)}}" class="genric-btn info">Edit</a>
             </div>
         </div>
     </article>

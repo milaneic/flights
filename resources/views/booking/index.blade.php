@@ -147,7 +147,7 @@
                 <h5>Airlines</h5>
             </div>
             <hr>
-            <div class="airlines p-2">
+            <div class="airlines p-2 mb-3">
                 @foreach (App\AirlineCompany::all() as $item)
                 <input type="checkbox" class="company" name="company" id="{{$item->name}}" value="{{$item->id}}">
                 {{$item->name}}
@@ -155,10 +155,6 @@
                 @endforeach
                 <input type="hidden" id="companies">
             </div>
-        </div>
-        <div class="airports">
-            <h5>Airports</h5>
-            <hr>
         </div>
         <div class="text-center"><button type="submit" id="filterit" class="boxed-btn4">Filter</button></div>
     </div>

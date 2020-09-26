@@ -104,7 +104,8 @@ class DestinationController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
         $destination->update($inputs);
-        if ($request->has('images')) {
+        //dd($request->all());
+        if ($request['file'] != null) {
             if (count($destination->images) > 0) {
                 $destination->images()->delete();
             }

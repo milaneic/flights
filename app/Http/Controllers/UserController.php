@@ -83,9 +83,6 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
-
-        //dd($request->all());
 
         if ($request['password'] != null || $request['confirm_password'] != null) {
             $inputs = $request->validate(

@@ -15,6 +15,7 @@ use PHPUnit\Framework\Constraint\Count;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Hash;
 
+
 use function GuzzleHttp\json_encode;
 
 /*
@@ -52,9 +53,9 @@ Route::group(['middleware' => 'web'], function () {
     });
 
 
+
     //Route for send contact us mail 
     Route::post('/mail', 'HomeController@mail')->name('mail-send');
-
 
 
     Route::get('/explore', function () {
@@ -129,8 +130,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/booking/{booking}/baggage', 'BookingController@baggage')->middleware('auth')->name('booking.baggage');
     Route::post('/booking/{booking}/baggage', 'BookingController@make')->middleware('auth')->name('booking.make');
 
-    Route::get('/booking/{booking}/check-in/{i?}', 'BookingController@check_in')->name('booking.check-in')->middleware(['auth', 'can:view,booking']);
-    Route::post('/booking/{booking}/check-in/{i?}', 'BookingController@check_store')->middleware(['auth'])->name('booking.check-store');
+    Route::get('/booking/{booking}/check-in/{p?}', 'BookingController@check_in')->name('booking.check-in')->middleware(['auth', 'can:view,booking']);
+    Route::post('/booking/{booking}/check-in/{p?}', 'BookingController@check_store')->middleware(['auth'])->name('booking.check-store');
     // //Route for seat    
     // Route::get('/seat', function () {
     //     return view('seat');

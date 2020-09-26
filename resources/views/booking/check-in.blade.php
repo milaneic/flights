@@ -30,7 +30,6 @@
                         <select id="document_type" name="document_type">
                             <option value="passport">Passport</option>
                             <option value="card">Personal card</option>
-
                         </select>
                     </div>
                 </div>

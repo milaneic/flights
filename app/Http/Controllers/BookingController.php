@@ -250,14 +250,20 @@ class BookingController extends Controller
 
             if ($i == count($booking->tickets) - 1) {
                 $ticket = $booking->tickets->get($i);
-                // if ($ticket->seat == null) {
-                //     $allSeats = json_decode($booking->flight->seats_map);
-                //     $freeseat = array();
-                //     for ($i = 0; $i < sizeof($allSeats); $i++) {
-                //         if ($allSeats[$i]->free == true) {
-                //         }
-                //     }
-                // }
+                if ($ticket->seat == null) {
+                    $allSeats = json_decode($booking->flight->seats_map);
+                    $freeseat = array();
+                    for ($i = 0; $i < sizeof($allSeats); $i++) {
+                        if ($allSeats[$i]->free == true) {
+                            //dd($allSeats[$i]->id);
+                            $ticket->seat = $allSeats[$i]->id;
+                            $ticket->update();
+                            $allSeats[$i]->free = false;
+                            $booking->flight->seats_map = json_encode($allSeats);
+                            $booking->flight->update();
+                        }
+                    }
+                }
                 $passenger = $ticket->passenger;
                 $passenger->update($data);
                 $booking->is_confirmed = 1;

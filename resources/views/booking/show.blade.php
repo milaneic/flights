@@ -50,7 +50,7 @@
                     <div class="p-4">
                         <p style="font-size:18px">Ticket id: {{$ticket->id}}</p>
                         <p style="font-size:18px">Ticket price: {{$ticket->price}} euro</p>
-                        @if ($booking->is_confirmed==0)
+                        @if ($ticket->seat==null)
                         <p style="font-size:18px">Seat number: Your seat will be assigned during check-in!</p>
                         @else
                         <p style="font-size:18px">Seat number: {{$ticket->getSeat($ticket->seat)}}</p>
